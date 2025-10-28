@@ -11,6 +11,7 @@ namespace Octrees {
 		glm::vec3 center, size, min, max;
 
 		bool Intersects(Bounds otherBounds);
+		void SetMinMax(glm::vec3 _min, glm::vec3 _max);
 	};
 }
 

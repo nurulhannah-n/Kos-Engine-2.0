@@ -64,7 +64,7 @@ namespace Octrees {
 		OctreeNode GetPathNode(int index);
 
 		bool AStar(OctreeNode* startNode, OctreeNode* endNode);
-		void ReconstructPath(Node* current);
+		void ReconstructPath(Node current);
 		float Heuristic(Node a, Node b);
 
 		void AddNode(OctreeNode _octreeNode);

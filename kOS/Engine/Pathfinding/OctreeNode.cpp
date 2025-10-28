@@ -48,6 +48,8 @@ namespace Octrees {
 		minNodeSize = _minNodeSize;
 		glm::vec3 newSize = bounds.size * 0.5f;
 		glm::vec3 centerOffset = bounds.size * 0.25f;
+		//glm::vec3 newSize = bounds.size;
+		//glm::vec3 centerOffset = bounds.size * 0.5f;
 		glm::vec3 parentCenter = bounds.center;
 
 		for (int i = 0; i < 8; ++i) {

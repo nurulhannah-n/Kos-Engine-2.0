@@ -27,18 +27,9 @@ namespace Octrees {
 
 		CalculateBounds();
 		CreateTree(minNodeSize);
-		auto start2 = std::chrono::high_resolution_clock::now();
-		GetEmptyLeaves(&root);
-		auto end2 = std::chrono::high_resolution_clock::now();
-		auto duration2 = std::chrono::duration_cast<std::chrono::microseconds>(end2 - start2);
-		//std::cout << "Elapsed time FOR GETTING LEAVES: " << duration2.count() << " microseconds\n";
-		GetEdges();
-		//std::cout << "EDGES: " << graph.edges.size() << std::endl;
 
-		//for (Edge edge : graph.edges) {
-		//	std::cout << "EDGE A: " << edge.a->octreeNode.bounds.center.x << ", " << edge.a->octreeNode.bounds.center.y << ", " << edge.a->octreeNode.bounds.center.z << std::endl;
-		//	std::cout << "EDGE B: " << edge.b->octreeNode.bounds.center.x << ", " << edge.b->octreeNode.bounds.center.y << ", " << edge.b->octreeNode.bounds.center.z << std::endl;
-		//}
+		GetEmptyLeaves(&root);
+		GetEdges();
 	}
 
 	void Octree::GetEmptyLeaves(OctreeNode* node) {
@@ -50,10 +41,13 @@ namespace Octrees {
 		}
 
 		if (node->children.empty()) {
+			// THIS MIGHT BE CAUSING ERRORS, IDK
+			//std::cout << "CHILD IS EMPTY\n";
 			return;
 		}
 
 		for (OctreeNode& child : node->children) {
+			//std::cout << "CALLING CHILD: " << child.bounds.center.x << ", " << child.bounds.center.y << ", " << child.bounds.center.z << std::endl;
 			GetEmptyLeaves(&child);
 		}
 
@@ -62,11 +56,13 @@ namespace Octrees {
 				if (i == j)
 					continue;
 
+				//std::cout << "ADDING EDGE: " << node->children[i].bounds.center.x << ", " << node->children[i].bounds.center.y << ", " << node->children[i].bounds.center.z << " | " <<
+				//	node->children[j].bounds.center.x << ", " << node->children[j].bounds.center.y << ", " << node->children[j].bounds.center.z << std::endl;
 				graph.AddEdge(&node->children[i], &node->children[j]);
-				//std::cout << "EDGE A: " << graph.edges.back().a->octreeNode.bounds.center.x << ", " << graph.edges.back().a->octreeNode.bounds.center.y << ", " << graph.edges.back().a->octreeNode.bounds.center.z << std::endl;
-				//std::cout << "EDGE B: " << graph.edges.back().b->octreeNode.bounds.center.x << ", " << graph.edges.back().b->octreeNode.bounds.center.y << ", " << graph.edges.back().b->octreeNode.bounds.center.z << std::endl;
 			}
 		}
+
+		std::cout << "\n";
 	}
 
 	void Octree::CreateTree(float minNodeSize) {
@@ -124,15 +120,30 @@ namespace Octrees {
 
 		bounds.center = boundCenter;
 		bounds.size = boundSize;
+		//bounds.SetMinMax(boundMin, boundMax);
 	}
 
 	void Octree::GetEdges() {
+		//std::cout << "EMPTY LEAVES COUNT: " << emptyLeaves.size();
+
 		for (OctreeNode leaf : emptyLeaves) {
+			//std::cout << "EMPTY LEAF CENTER: " << leaf.bounds.center.x << ", " << leaf.bounds.center.y << ", " << leaf.bounds.center.z << std::endl;
+			//std::cout << "EMPTY LEAF SIZE: " << leaf.bounds.size.x << "," << leaf.bounds.size.y << ", " << leaf.bounds.size.z << std::endl << std::endl;
 			for (OctreeNode otherLeaf : emptyLeaves) {
 				if (leaf == otherLeaf)
 					continue;
 
-				if (leaf.bounds.Intersects(otherLeaf.bounds)) {
+				//if (leaf.bounds.Intersects(otherLeaf.bounds)) {
+				//	//std::cout << leaf.bounds.center.x <<  ", " << leaf.bounds.center.y << ", " << leaf.bounds.center.z << " INTERSECTING WITH "
+				//	//	<< otherLeaf.bounds.center.x << ", " << otherLeaf.bounds.center.y << ", " << otherLeaf.bounds.center.z << std::endl;
+				//	graph.AddEdge(&leaf, &otherLeaf);
+				//}
+
+				Bounds otherBounds = otherLeaf.bounds;
+				otherBounds.size *= 1.1f;
+					if (leaf.bounds.Intersects(otherBounds)) {
+					//std::cout << leaf.bounds.center.x <<  ", " << leaf.bounds.center.y << ", " << leaf.bounds.center.z << " INTERSECTING WITH "
+					//	<< otherLeaf.bounds.center.x << ", " << otherLeaf.bounds.center.y << ", " << otherLeaf.bounds.center.z << std::endl;
 					graph.AddEdge(&leaf, &otherLeaf);
 				}
 			}
