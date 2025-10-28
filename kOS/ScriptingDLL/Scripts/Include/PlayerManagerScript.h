@@ -1,7 +1,5 @@
 #include "TemplateSC.h"
-#include "Inputs/Input.h"
-#include "Config/pch.h"
-#include "ECS/ECS.h"
+//#include "Inputs/Input.h"
 
 class PlayerManagerScript : public TemplateSC {
 public:
@@ -9,17 +7,13 @@ public:
 	float playerMovementSpeed;
 	float playerJumpForce;
 
+
 	void Start() override {
 
 	}
 
 	void Update() override {
-		ecs::ECS* ecs = ecs::ECS::GetInstance();
-
 		if (auto* tc = ecsPtr->GetComponent<ecs::TransformComponent>(entity)) {
-			//tc->LocalTransformation.position.x += 0.01f;
-			tc->LocalTransformation.position += glm::vec3(0.01f, 0.f, 0.f) * ecs->deltaTime;
-
 			float pitch = tc->LocalTransformation.rotation.x;
 			float yaw = tc->LocalTransformation.rotation.y;
 
@@ -35,9 +29,17 @@ public:
 				-sin(yaw)
 			};
 
-			if (Input::InputSystem::inputSystem->IsKeyPressed(keys::W)) {
+			if (inputPtr->IsKeyTriggered(keys::A)) {
+				std::cout << "AAAAAAAAAAAAAAAAAAAAAah\n";
+			}
+
+			if (inputPtr->GetInstance()->IsKeyTriggered(keys::S)) {
+				std::cout << "BBBBBBBBBBBBBBBBBBB\n";
+			}
+
+			if (inputPtr->IsKeyPressed(keys::W)) {
 				std::cout << "MOVING FORWARD\n";
-				tc->LocalTransformation.position += glm::normalize(forward) * ecs->deltaTime;
+				tc->LocalTransformation.position += glm::normalize(forward) * ecsPtr->m_GetDeltaTime();
 			}
 		}
 	}

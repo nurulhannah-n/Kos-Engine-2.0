@@ -12,7 +12,7 @@ public:
 	//use raw, shared ptr will destruct exe ecs
 	
 	static ecs::ECS* ecsPtr;
-	static Input::InputSystem* Input;
+	static Input::InputSystem* inputPtr;
 private:
 };
 

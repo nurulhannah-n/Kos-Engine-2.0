@@ -26,7 +26,7 @@ extern "C"  __declspec(dllexport) void UpdateStatic(StaticVariableManager* svm) 
 	ComponentRegistry::SetInputInstance(static_cast<Input::InputSystem*>(svm->input));
 
 	TemplateSC::ecsPtr = ComponentRegistry::GetECSInstance();
-	TemplateSC::Input = ComponentRegistry::GetInputInstance();
+	TemplateSC::inputPtr = ComponentRegistry::GetInputInstance();
 
 
 

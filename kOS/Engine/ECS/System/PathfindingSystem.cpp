@@ -70,6 +70,10 @@ namespace ecs {
 		//basicDebug.worldTransform = model;
 		//gm->gm_PushCubeDebugData(BasicDebugData{ basicDebug });
 
+		if (Input::InputSystem::GetInstance()->IsKeyTriggered(keys::LMB)) {
+			std::cout << "I AM GAY\n";
+		}
+
 		if (!testing2) {
 			//octree.graph.AStar(currentNodePos, octree.graph.nodes[0].octreeNode);
 
@@ -91,6 +95,7 @@ namespace ecs {
 			//for (Octrees::Node no : octree.graph.nodes) {
 			//	std::cout << "EDGES: " << no.edges.size() << std::endl;
 			//}
+
 			testing2 = true;
 		}
 

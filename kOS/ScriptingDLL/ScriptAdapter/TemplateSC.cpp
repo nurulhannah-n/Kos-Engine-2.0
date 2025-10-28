@@ -1,3 +1,3 @@
 #include "TemplateSC.h"
 ecs::ECS* TemplateSC::ecsPtr{ nullptr };
-Input::InputSystem* TemplateSC::Input{ nullptr };
+Input::InputSystem* TemplateSC::inputPtr{ nullptr };
