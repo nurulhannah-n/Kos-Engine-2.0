@@ -221,17 +221,12 @@ namespace ecs{
 		m_entityMap.find(NewEntity)->second = DuplicateSignature;
 		RegisterEntity(NewEntity);
 
-		TransformComponent* transform = GetComponent<TransformComponent>(NewEntity);
-
 		//checks if duplicates entity has parent and assign it
 		if (hierachy::GetParent(DuplicatesID).has_value()) {
-			TransformComponent* pTransform = GetComponent<TransformComponent>(DuplicatesID);
-			TransformSystem::CalculateWorldTransformMtx(transform);
+			//TransformComponent* transform = GetComponent<TransformComponent>(hierachy::GetParent(DuplicatesID).value());
+			//transform->m_childID.push_back(NewEntity);
 			auto parent = hierachy::GetParent(DuplicatesID).value();
 			hierachy::m_SetParent(parent, NewEntity);
-		}
-		else {
-			TransformSystem::CalculateAllTransform(transform);
 		}
 
 		//checks if entity has child call recursion
@@ -248,6 +243,7 @@ namespace ecs{
 		}
 
 		return NewEntity;
+
 	}
 
 	bool ECS::DeleteEntity(EntityID ID) {
