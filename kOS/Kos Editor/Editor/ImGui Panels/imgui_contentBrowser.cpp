@@ -217,17 +217,18 @@ namespace gui {
 								// clear save scene state
 
 								// unload all regular scenes
-								for (auto& scene : ecs->sceneMap) {
-									scene.second.isActive = false;
+								for (auto& [scene, sceneData] : ecs->sceneMap) {
+
+									scenemanager->SetSceneActive(scene, false);
 								}
 
 								// set prefab to active
-								prefabscene->second.isActive = true;
+								scenemanager->SetSceneActive(prefabscene->first, true);
 
 								// Duplicate Entity and add it into original scene. Will be removed when m_prefabSceneMode is set back to false. 
 								// (Duped Entity used to check if any edits has been made to prefab)
-								duppedID = ecs::ECS::GetInstance()->DuplicateEntity(prefabscene->second.prefabID, m_activeScene);
-								ecs::ECS::GetInstance()->GetComponent<ecs::NameComponent>(duppedID)->prefabName = prefabscene->first;
+								//duppedID = ecs::ECS::GetInstance()->DuplicateEntity(prefabscene->second.prefabID, m_activeScene);
+								//ecs::ECS::GetInstance()->GetComponent<ecs::NameComponent>(duppedID)->prefabName = prefabscene->first;
 
 								//set prefab as active scene
 								m_activeScene = directoryPath.path().filename().string();
@@ -272,14 +273,17 @@ namespace gui {
 
 					if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None)) {
 						std::string GUID = assetmanager->GetGUIDfromFilePath(directoryPath.path());
+						std::string filepath = directoryPath.path().string();
+						AssetPathGUID data;
+						std::strncpy(data.path, filepath.c_str(), sizeof(data.path) - 1);
+						std::strncpy(data.GUID, GUID.c_str(), sizeof(data.GUID) - 1);
+
+						ImGui::SetDragDropPayload("file", &data, sizeof(data));
 
 						if (!GUID.empty()) {
-							ImGui::SetDragDropPayload("file", GUID.c_str(), GUID.size() + 1);
 							ImGui::Text(GUID.c_str());
 						}	
 						else {
-							std::string filepath = directoryPath.path().string();
-							ImGui::SetDragDropPayload("file", filepath.c_str(), filepath.size() + 1);
 							ImGui::Text(filepath.c_str());
 						}
 						ImGui::EndDragDropSource();
@@ -316,7 +320,7 @@ namespace gui {
 								{
 									if (ImGui::MenuItem(comp.type.c_str()))
 									{
-										assetmanager->Compilefile(directoryPath.path(), comp.outputExtension);
+										assetmanager->Compilefile(directoryPath.path());
 									}
 								}
 								ImGui::EndMenu();
@@ -406,9 +410,6 @@ namespace gui {
 
 								// Copy directory and all contents recursively
 								std::filesystem::copy(source, destination, std::filesystem::copy_options::recursive);
-
-								//load new asset
-								assetmanager->RegisterAsset(destination / source.filename());
 							}
 
 						}
@@ -427,7 +428,7 @@ namespace gui {
 					IM_ASSERT(payload->DataSize == sizeof(ecs::EntityID));
 					LOGGING_DEBUG("Dropping To Save Prefab");
 					ecs::EntityID id = *static_cast<ecs::EntityID*>(payload->Data);
-					prefab::Prefab::m_SaveEntitytoPrefab(id);
+					prefab::m_SaveEntitytoPrefab(id);
 				}
 				ImGui::EndDragDropTarget();
 			}

@@ -32,7 +32,7 @@ namespace ecs {
 		
 	}
 
-	void RenderSystem::Update(const std::string& scene)
+	void RenderSystem::Update()
 	{
 		ECS* ecs = ECS::GetInstance();
 		const auto& entities = m_entities.Data();
@@ -43,7 +43,7 @@ namespace ecs {
 			SpriteComponent* sprite = ecs->GetComponent<SpriteComponent>(id);
 
 			//skip component not of the scene
-			if ((sprite->scene != scene) || !ecs->layersStack.m_layerBitSet.test(NameComp->Layer) || NameComp->hide) continue;
+			if (!ecs->layersStack.m_layerBitSet.test(NameComp->Layer) || NameComp->hide) continue;
 		
 
 

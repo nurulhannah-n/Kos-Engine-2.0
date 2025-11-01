@@ -139,8 +139,17 @@ inline PxFilterFlags ToPhysxCustomFilter(PxFilterObjectAttributes a0, PxFilterDa
 	if (!shouldCollide) { return PxFilterFlag::eSUPPRESS; }
 	pairFlags = PxPairFlag::eCONTACT_DEFAULT;
 	pairFlags |= PxPairFlag::eNOTIFY_TOUCH_FOUND;
+	pairFlags |= PxPairFlag::eNOTIFY_TOUCH_PERSISTS;
 	pairFlags |= PxPairFlag::eNOTIFY_TOUCH_LOST;
 	return PxFilterFlag::eDEFAULT;
 }
+
+struct RaycastHit {
+	PxRigidActor* rigidbody = nullptr;
+	PxShape* collider = nullptr;
+	glm::vec3 point;
+	glm::vec3 normal;
+	float distance = 0.0f;
+};
 
 #endif

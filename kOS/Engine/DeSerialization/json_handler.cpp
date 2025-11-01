@@ -65,13 +65,12 @@ namespace Serialization {
 			createFile << "[]";  // Initialize empty JSON array
 			createFile.close();
 		}
+
 		checkFile.close();
 	}
 
-	void LoadScene(const std::filesystem::path& jsonFilePath)
+	void LoadScene(const std::filesystem::path& jsonFilePath, const std::string sceneName)
 	{
-
-
 		// Open the JSON file for reading
 		std::ifstream inputFile(jsonFilePath.string());
 
@@ -87,10 +86,7 @@ namespace Serialization {
 		rapidjson::Document doc;
 		doc.Parse(fileContent.c_str());
 
-		std::string scenename = jsonFilePath.filename().string();
-
-		
-		
+		std::string scenename = sceneName.empty() ? jsonFilePath.filename().string() : sceneName;
 
 		/*******************INSERT INTO FUNCTION*****************************/
 
@@ -102,25 +98,21 @@ namespace Serialization {
 				//load scene data
 				SceneData sceneData;
 				LoadComponentreflect(&sceneData, entityData);
-				std::cout << scenename << " has been loaded" << std::endl;
 				ecs::ECS::GetInstance()->AddScene(scenename, sceneData);
-				//load physics layer
-				physicslayer::PhysicsLayer::m_GetInstance()->LoadCollisionLayer(sceneData.collisionData);
+
 			}
 			else {
 				LoadEntity(entityData, std::nullopt, scenename);
 			}
 		}
 
-
-
 		LOGGING_INFO("Load Json Successful");
 	}
 
-	void SaveScene(const std::filesystem::path& scene)
+	void SaveScene(const std::filesystem::path& scene, const std::filesystem::path& targetFilePath)
 	{
 		auto* ecs = ecs::ECS::GetInstance();
-		std::string jsonFilePath = scene.string();
+		std::string jsonFilePath = targetFilePath.empty() ? scene.string() : targetFilePath.string();
 		JsonFileValidation(jsonFilePath);
 
 		// Create JSON object to hold the updated values
@@ -134,22 +126,36 @@ namespace Serialization {
 
 		//save scene data
 		auto sceneName = scene.filename().string();
-		if(ecs->sceneMap.find(sceneName) != ecs->sceneMap.end())
 		{
-			auto data = ecs->sceneMap.at(sceneName);
+			
+			SceneData data;
+			if (ecs->sceneMap.find(sceneName) != ecs->sceneMap.end())
+			{
+				data = ecs->sceneMap.at(sceneName);
+			}
+
 			rapidjson::Value sceneData(rapidjson::kObjectType);
 			saveComponentreflect(&data, sceneData, allocator);
 			doc.PushBack(sceneData, allocator);
 		}
 
-		std::unordered_set<ecs::EntityID> savedEntities;  //track saved entities
-		//Start saving the entities
-		std::vector<ecs::EntityID> entities = ecs->sceneMap.find(scene.filename().string())->second.sceneIDs;
-		for (const auto& entityId : entities) {
-			if (!ecs::Hierachy::GetParent(entityId).has_value()) {
-				SaveEntity(entityId, doc, allocator, savedEntities);
+
+
+		{
+			if (ecs->sceneMap.find(sceneName) != ecs->sceneMap.end())
+			{
+				std::unordered_set<ecs::EntityID> savedEntities;  //track saved entities
+				//Start saving the entities
+				std::vector<ecs::EntityID> entities = ecs->sceneMap.find(sceneName)->second.sceneIDs;
+				for (const auto& entityId : entities) {
+					if (!hierachy::GetParent(entityId).has_value()) {
+						SaveEntity(entityId, doc, allocator, savedEntities);
+					}
+				}
 			}
 		}
+
+
 
 		// Write the JSON back to file
 		rapidjson::StringBuffer writeBuffer;
@@ -157,9 +163,15 @@ namespace Serialization {
 		doc.Accept(writer);
 
 		std::ofstream outputFile(jsonFilePath);
+		//if file exist
 		if (outputFile) {
 			outputFile << writeBuffer.GetString();
 			outputFile.close();
+		}
+		else { //craete new file
+			std::ofstream createFile(jsonFilePath);
+			createFile << writeBuffer.GetString();
+			createFile.close();
 		}
 
 		LOGGING_INFO("Save Json Successful");
@@ -189,7 +201,7 @@ namespace Serialization {
 
 
 		// Add children
-		std::optional<std::vector<ecs::EntityID>> childrenOptional = ecs::Hierachy::m_GetChild(entityId);
+		std::optional<std::vector<ecs::EntityID>> childrenOptional = hierachy::m_GetChild(entityId);
 		if (childrenOptional.has_value()) {
 			std::vector<ecs::EntityID> children = childrenOptional.value();
 			if (!children.empty()) {
@@ -222,7 +234,7 @@ namespace Serialization {
 
 		//Attach entity to parent
 		if (parentID.has_value()) {
-			ecs::Hierachy::m_SetParent(parentID.value(), newEntityId);
+			hierachy::m_SetParent(parentID.value(), newEntityId);
 		}
 
 		// Load children 

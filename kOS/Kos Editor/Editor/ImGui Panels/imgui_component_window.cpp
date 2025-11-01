@@ -34,14 +34,10 @@ void DrawFieldComponent(ecs::Component* component, const std::string& ComponentN
 void gui::ImGuiHandler::DrawComponentWindow()
 {
     bool windowOpen = true;
-    std::string Title = "Component Window";
-
-    std::string windowTitle = Title;
-
-    ImGui::Begin(windowTitle.c_str(), &windowOpen);
+    std::string title = "Component Window";
+    ImGui::Begin(title.c_str(), &windowOpen);
 
     //Add Component Window
-
 
     if (m_ecs->GetEntitySignatureData().size() > 0 && m_clickedEntityId >= 0) {
 
@@ -49,28 +45,31 @@ void gui::ImGuiHandler::DrawComponentWindow()
         ecs::ComponentSignature EntitySignature = m_ecs->GetEntitySignature(entityID);
 
         const auto& componentsString = m_ecs->GetComponentsString();
-        std::vector<const char*>componentNames;
+        static std::vector<const char*>componentNames = {"add Components"};
+        static bool initComponentName = false;
 
-        for (const auto& names: componentsString) {
-            componentNames.push_back(names.c_str());
+        if (!initComponentName) {
+            for (const auto& names : componentsString) {
+                componentNames.push_back(names.c_str());
+            }
+            initComponentName = true;
         }
+
+
        
 
         int ComponentTypeIndex = 0;
         if (ImGui::Combo("##ADDCOMPONENT", &ComponentTypeIndex, componentNames.data(), static_cast<int>(componentNames.size()))) {
             std::string componentName = componentNames[ComponentTypeIndex];
             if (!m_ecs->GetEntitySignature(entityID).test(m_ecs->GetComponentKey(componentName))) {
-
                 auto& action = m_ecs->componentAction.at(componentName);
-				action->AddComponent(entityID);
-
+                action->AddComponent(entityID);
             }
         }
 
         ImGui::SeparatorText("Components");
 
-        if (EntitySignature.test(m_ecs->GetComponentKey(ecs::NameComponent::classname())))
-        {
+        if (EntitySignature.test(m_ecs->GetComponentKey(ecs::NameComponent::classname()))) {
             // Retrieve the TransformComponent
             ecs::NameComponent* nc = m_ecs->GetComponent<ecs::NameComponent>(entityID);
             //Display Position
@@ -83,100 +82,115 @@ void gui::ImGuiHandler::DrawComponentWindow()
 
             bool hidden = nc->hide;
             if (ImGui::Checkbox("Hide", &hidden)) {
-                if (!nc->hide) {
-                    m_ecs->layersStack.m_hideEntitywithChild(entityID);
+                nc->hide ? m_ecs->layersStack.m_unhideEntitywithChild(entityID) : m_ecs->layersStack.m_hideEntitywithChild(entityID);
+            }
+
+            ImGui::TextDisabled(std::string("Entity ID: " + std::to_string(entityID)).c_str());
+
+            {
+                //layer selector
+                static constexpr auto enumNames = magic_enum::enum_names<layer::LAYERS>();
+
+                // Persistent storage for null-terminated strings
+                static std::array<std::string, enumNames.size()> namesStr{};
+                static std::array<const char*, enumNames.size()> items{};
+
+                static bool initialized = false;
+                if (!initialized) {
+                    for (size_t i = 0; i < enumNames.size(); i++) {
+                        namesStr[i] = std::string(enumNames[i]);  // store the string
+                        items[i] = namesStr[i].c_str();           // pointer is valid now
+                    }
+                    initialized = true;
+                }
+
+                int layer_current = nc->Layer;
+                if (ImGui::Combo("Layers", &layer_current, items.data(), static_cast<int>(items.size()))) {
+                    m_ecs->layersStack.m_SwapEntityLayer((layer::LAYERS)layer_current, nc->Layer, entityID);
+                }
+            }
+
+            {
+                // Convert vector to array of char* for ImGui
+                std::vector<const char*> tag_Names(m_tags.size());
+                std::transform(m_tags.begin(), m_tags.end(), tag_Names.begin(), [](const std::string& tag) {  return tag.c_str(); });
+
+                int item{};
+                const auto& it = std::find(tag_Names.begin(), tag_Names.end(), nc->entityTag);
+                if (it != tag_Names.end()) {
+                    item = static_cast<int>(std::distance(tag_Names.begin(), it));
                 }
                 else {
-                    m_ecs->layersStack.m_unhideEntitywithChild(entityID);
+                    tag_Names.push_back(nc->entityTag.c_str());
+                    const auto& it2 = std::find(tag_Names.begin(), tag_Names.end(), nc->entityTag);
+                    item = static_cast<int>(std::distance(tag_Names.begin(), it2));
                 }
 
-            }
-            
-            ImGui::TextDisabled(std::string( "Entity ID: " + std::to_string(entityID)).c_str());
-
-            //layer selector
-            const char* layers[] = { m_ecs->layersStack.m_layerMap[layer::DEFAULT].first.c_str(), m_ecs->layersStack.m_layerMap[layer::LAYER1].first.c_str(),m_ecs->layersStack.m_layerMap[layer::LAYER2].first.c_str(),
-                                  m_ecs->layersStack.m_layerMap[layer::LAYER3].first.c_str(), m_ecs->layersStack.m_layerMap[layer::LAYER4].first.c_str(), m_ecs->layersStack.m_layerMap[layer::LAYER5].first.c_str(),
-                                  m_ecs->layersStack.m_layerMap[layer::LAYER6].first.c_str(), m_ecs->layersStack.m_layerMap[layer::LAYER7].first.c_str(), m_ecs->layersStack.m_layerMap[layer::LAYER8].first.c_str() };
-
-            std::vector<const char*> layers_vec;
-            for (const auto& _layer : m_ecs->layersStack.m_layerMap) {
-                layers_vec.push_back(_layer.second.first.c_str());
+                if (ImGui::Combo("Tag", &item, tag_Names.data(), static_cast<int>(tag_Names.size()))) {
+                    nc->entityTag = m_tags[item];
+                }
             }
 
-            int layer_current = nc->Layer;
-            if (ImGui::Combo("Layers", &layer_current, layers_vec.data(), static_cast<int>(layers_vec.size()))) {
-                m_ecs->layersStack.m_SwapEntityLayer((layer::LAYERS)layer_current, nc->Layer, entityID);  
-            }
+            {
+                // Prefab Overwriting
+                if (nc->isPrefab && !m_prefabSceneMode) {
+                    auto* tc = m_ecs->GetComponent<ecs::TransformComponent>(entityID);
+                    if (!tc->m_haveParent || !m_ecs->GetComponent<ecs::NameComponent>(tc->m_parentID)->isPrefab) {
+                        static bool isHeaderOpen = false;
+                        static std::vector<std::string> diffComp;
+                        bool open = false;
+                        std::string headerName = nc->prefabName + " [Changed]";
+                        int IMGUI_ID = 0;
+                        float pos = ImGui::GetCursorPosX() + ImGui::GetWindowSize().x - 200;
 
-            // Convert vector to array of char* for ImGui
-            std::vector<const char*> tag_Names(m_tags.size());
-            std::transform(m_tags.begin(), m_tags.end(), tag_Names.begin(), [](const std::string& tag) {  return tag.c_str(); });
-
-            int item{};
-            const auto& it = std::find(tag_Names.begin(), tag_Names.end(), nc->entityTag);
-            if (it != tag_Names.end()) {
-                item = static_cast<int>(std::distance(tag_Names.begin(), it));
-            }
-            else {
-                tag_Names.push_back(nc->entityTag.c_str());
-                const auto& it2 = std::find(tag_Names.begin(), tag_Names.end(), nc->entityTag);
-                item = static_cast<int>(std::distance(tag_Names.begin(), it2));
-            }
-            
-            if (ImGui::Combo("Tag", &item, tag_Names.data(), static_cast<int>(tag_Names.size()))) {
-                nc->entityTag = m_tags[item];
-            }
-
-           // std::cout << nc->entityTag << std::endl;
-            //create overwrite button for prefab
-            if (nc->isPrefab && !m_prefabSceneMode) {
-                auto* tc = m_ecs->GetComponent<ecs::TransformComponent>(entityID);
-                if (!tc->m_haveParent || !m_ecs->GetComponent<ecs::NameComponent>(tc->m_parentID)->isPrefab) {
-                    static bool isHeaderOpen = false;
-                    static std::vector<std::string> diffComp;
-                    bool open = false;
-                    std::string headerName = nc->prefabName + " [Changed]";
-                    int IMGUI_ID = 0;
-                    if (open = ImGui::CollapsingHeader(headerName.c_str())) {
-                        for (const auto& compName : diffComp) {
-                            if (compName == ecs::NameComponent::classname()) continue;
-                            ImGui::TextDisabled(compName.c_str());
-                            ImGui::SameLine();
-                            ImGui::PushID(IMGUI_ID++);
-                            if(ImGui::Button("Revert")){
-                                // Look for component of prefab and set data into me
-                                prefab::Prefab::RevertToPrefab_Component(entityID, compName, nc->prefabName);
-                                prefab::Prefab::RefreshComponentDifferenceList(diffComp, entityID);
+                        if (open = ImGui::BeginCombo("##PrefabChanges", headerName.c_str())) {
+                            for (const auto& compName : diffComp) {
+                                if (compName == ecs::NameComponent::classname()) continue;
+                                ImGui::TextDisabled(compName.c_str());
+                                ImGui::SameLine();
+                                ImGui::PushID(IMGUI_ID++);
+                                ImGui::SetCursorPosX(pos);
+                                if (ImGui::Button("Revert")) {
+                                    // Look for component of prefab and set data into me
+                                    prefab::RevertToPrefab_Component(entityID, compName, nc->prefabName);
+                                    prefab::RefreshComponentDifferenceList(diffComp, entityID);
+                                }
+                                ImGui::SameLine();
+                                if (ImGui::Button("Overwrite")) {
+                                    // Look for component of prefab and set data from me
+                                    prefab::OverwritePrefab_Component(entityID, compName, nc->prefabName);
+                                    prefab::RefreshComponentDifferenceList(diffComp, entityID);
+                                }
+                                ImGui::PopID();
                             }
-                            ImGui::SameLine();
-                            if (ImGui::Button("Overwrite")) {
-                                // Look for component of prefab and set data from me
-                                prefab::Prefab::OverwritePrefab_Component(entityID, compName, nc->prefabName);
-                                prefab::Prefab::RefreshComponentDifferenceList(diffComp, entityID);
+
+                            // Overwrite All
+                            if (ImGui::Button("Overwrite All Components", { ImGui::GetContentRegionAvail().x, 0 })) {
+                                try {
+                                    prefab::OverwriteScenePrefab(m_clickedEntityId);
+                                    prefab::UpdateAllPrefab(nc->prefabName);
+                                }
+                                catch (...) {
+                                    LOGGING_ERROR("Prefab overwrite, failed");
+                                }
+                                ImGui::EndCombo();
+                                ImGui::End();
+                                return;
                             }
-                            ImGui::PopID();
+                            ImGui::EndCombo();
                         }
-                        //if (ImGui::Button("Overwrite All")) {
-                        //    prefab::Prefab::m_OverWriteScenePrefab(entityID);
-                        //}
-                        //ImGui::SameLine();
-                        //if (ImGui::Checkbox("Sync", &nc->syncPrefab)) {
-                        //    prefab::Prefab::m_UpdateAllPrefabEntity(nc->prefabName);
-                        //}
-                    }
-                    
-                    if (isHeaderOpen != open) { // Needed to show change in state
-                        if (open) {
-                            prefab::Prefab::RefreshComponentDifferenceList(diffComp, entityID);
+
+                        if (isHeaderOpen != open) { // Needed to show change in state
+                            if (open) {
+                                prefab::RefreshComponentDifferenceList(diffComp, entityID);
+                            }
+                            else {
+                                diffComp.clear();
+                            }
+                            isHeaderOpen = open;
                         }
-                        else {
-                            diffComp.clear();
-                        }
-                        isHeaderOpen = open;
                     }
                 }
-                
             }
         }
 
@@ -194,35 +208,30 @@ void gui::ImGuiHandler::DrawComponentWindow()
                     auto& editorAction = componentDrawers[ComponentName];
                     editorAction->Draw(component);
                 }
-                else {  
-                   // auto& actionMap = GetComponentActionMap();
-                    //scrpt components
+                else {
+                    // auto& actionMap = GetComponentActionMap();
+                     //scrpt components
                     DrawFieldComponent(component, ComponentName, entityID);
- 
+
                 }
                 ImGui::PopID();
-
-
             }
         }
 
-        //draw invinsible box
-        if (ImGui::GetContentRegionAvail().x > 0 && ImGui::GetContentRegionAvail().y > 0) {
-
-            ImGui::InvisibleButton("##Invinsible", ImVec2{ ImGui::GetContentRegionAvail().x,ImGui::GetContentRegionAvail().y });
-
-            if (ImGui::BeginDragDropTarget())
-            {
-                if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("file"))
-                {
-                    IM_ASSERT(payload->DataSize == sizeof(std::filesystem::path));
-                    std::filesystem::path* filename = static_cast<std::filesystem::path*>(payload->Data);
-                }
-                ImGui::EndDragDropTarget();
-            }
-        }
-
-     }
+        //draw invinsible box - currently not doing anything right now
+        //if (ImGui::GetContentRegionAvail().x > 0 && ImGui::GetContentRegionAvail().y > 0) {
+        //    ImGui::InvisibleButton("##Invinsible", ImVec2{ ImGui::GetContentRegionAvail().x,ImGui::GetContentRegionAvail().y });
+        //    if (ImGui::BeginDragDropTarget())
+        //    {
+        //        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("file"))
+        //        {
+        //            IM_ASSERT(payload->DataSize == sizeof(std::filesystem::path));
+        //            std::filesystem::path* filename = static_cast<std::filesystem::path*>(payload->Data);
+        //        }
+        //        ImGui::EndDragDropTarget();
+        //    }
+        //}
+    }
     ImGui::End();
 }   
 
@@ -250,14 +259,12 @@ void DrawFieldComponent(ecs::Component* component, const std::string& ComponentN
 
     if (open) {
 
-
         auto fieldReference = action->GetFieldReference(component);
         auto names = action->GetNames();
         DrawComponents draw(names);
 
         for (auto& field : fieldReference) {
             
-
             if (field.IsType<float>()) {
                 draw(field.AsType<float>());
             }
@@ -291,12 +298,9 @@ void DrawFieldComponent(ecs::Component* component, const std::string& ComponentN
             else if (field.IsType<std::vector<glm::vec4>>()) {
                 draw(field.AsType<std::vector<glm::vec4>>());
             }
-
             else {
                 draw.count++;
             }
-
         }
-
     }
 }

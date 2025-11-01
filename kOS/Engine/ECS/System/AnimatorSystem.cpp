@@ -11,7 +11,7 @@ namespace ecs {
         // Initialize animation playback resources if needed
     }
 
-    void AnimatorSystem::Update(const std::string& scene)
+    void AnimatorSystem::Update()
     {
         ECS* ecs = ECS::GetInstance();
         const auto& entities = m_entities.Data();
@@ -21,7 +21,7 @@ namespace ecs {
             NameComponent* nameComp = ecs->GetComponent<NameComponent>(id);
 
             // Skip entities not in this scene or hidden
-            if ((animator->scene != scene) || !ecs->layersStack.m_layerBitSet.test(nameComp->Layer) || nameComp->hide)
+            if (!ecs->layersStack.m_layerBitSet.test(nameComp->Layer) || nameComp->hide)
                 continue;
 
             // TODO: Advance playback time

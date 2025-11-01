@@ -27,6 +27,7 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 #include "Resources/R_Animation.h"
 #include "Resources/R_Audio.h"
 #include "Resources/R_Material.h"
+#include "Resources/R_DepthMapCube.h"
 class ResourceManager {
 
 public:
@@ -39,6 +40,7 @@ public:
 		RegisterResourceType<R_Animation>(".ani");
 		RegisterResourceType<R_Audio>(".wav");
 		RegisterResourceType<R_Material>(".mat");
+		RegisterResourceType<R_DepthMapCube>(".dcm");
         //Wait for texture type
     }
 
@@ -83,7 +85,7 @@ public:
 		//Asset not loaded
 
         //create file path
-        std::string path = m_resourceDirectory + "/" + className + "/" + GUID + m_resourceExtension.at(className);
+        std::string path = m_resourceDirectory + "/" + GUID + m_resourceExtension.at(className);
 
 		//Check if file path exists
 

@@ -23,9 +23,15 @@ namespace ecs {
     class TransformSystem : public ISystem {
     public:
         void Init() override;
-        void Update(const std::string&) override;
-        void SetTransform(TransformComponent* transComp, const glm::mat4& parentWorldMtx = glm::mat4(1.0f));
-        void SetLocalTransformMtx(TransformComponent* transformComp);
+        void Update() override;
+        static void CalculateAllTransform(TransformComponent* transComp, const glm::mat4& parentWorldMtx = glm::mat4(1.0f));
+        static void CalculateLocalTransformMtx(TransformComponent* transformComp);
+        static void SetImmediateWorldPosition(TransformComponent* transformComp, glm::vec3&& pos);
+        static void SetImmediateWorldRotation(TransformComponent* transformComp, glm::vec3&& rot);
+        static void SetImmediateWorldScale(TransformComponent* transformComp, glm::vec3&& scale);
+        static void SetImmediateLocalPosition(TransformComponent* transformComp, glm::vec3&& pos);
+        static void SetImmediateLocalRotation(TransformComponent* transformComp, glm::vec3&& rot);
+        static void SetImmediateLocalScale(TransformComponent* transformComp, glm::vec3&& scale);
         REFLECTABLE(TransformSystem)
     };
 

@@ -35,7 +35,7 @@ namespace ecs {
 		
 	}
 
-	void PathfindingSystem::Update(const std::string& scene) {
+	void PathfindingSystem::Update() {
 		ECS* ecs = ECS::GetInstance();
 		const auto& entities = m_entities.Data();
 		for (EntityID id : entities) {
@@ -43,7 +43,7 @@ namespace ecs {
 			NameComponent* name = ecs->GetComponent<NameComponent>(id);
 			OctreeGeneratorComponent* oct = ecs->GetComponent<OctreeGeneratorComponent>(id);
 
-			if (!oct || oct->scene != scene || !trans || trans->scene != scene || name->hide) { continue; }
+			if (name->hide) { continue; }
 
 			if (oct->drawWireframe) {
 				if (testing) {

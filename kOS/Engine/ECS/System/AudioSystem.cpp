@@ -54,7 +54,7 @@ namespace ecs {
         }
 
     }
-    void AudioSystem::Update(const std::string& scene) {
+    void AudioSystem::Update() {
         auto rm = ResourceManager::GetInstance();
         ECS* ecs = ECS::GetInstance();
        
@@ -67,7 +67,6 @@ namespace ecs {
             if (!transform || !nameComp || !audioComp) continue;
 
             //Scene layer visbility filter
-            if (transform->scene != scene) continue;
             if (!ecs->layersStack.m_layerBitSet.test(nameComp->Layer)) continue;
             if (nameComp->hide) continue;
 
