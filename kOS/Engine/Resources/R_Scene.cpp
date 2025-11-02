@@ -4,7 +4,7 @@
 
 void R_Scene::Load()
 {
-	scenes::SceneManager::m_GetInstance()->LoadScene(m_filePath);
+
 }
 
 void R_Scene::Unload()
@@ -12,6 +12,11 @@ void R_Scene::Unload()
 
 	//scenes::SceneManager::m_GetInstance()->ClearScene(m_filePath.filename().string());
 
+}
+
+void R_Scene::LoadScene()
+{
+	scenes::SceneManager::m_GetInstance()->LoadScene(m_filePath);
 }
 
 int R_Scene::DuplicatePrefabIntoScene(const std::string& scene) {
