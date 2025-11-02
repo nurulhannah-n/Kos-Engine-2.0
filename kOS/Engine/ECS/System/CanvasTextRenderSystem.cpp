@@ -56,13 +56,13 @@ namespace ecs {
 
             for (EntityID childID : childEntities.value())
             {
-                std::shared_ptr<ResourceManager> rm = ResourceManager::GetInstance();
+                ResourceManager* rm = ResourceManager::GetInstance();
                 std::shared_ptr<GraphicsManager> gm = GraphicsManager::GetInstance();
                 if (ecs->HasComponent<TextComponent>(childID))
                 {
                     TextComponent* textComp = ecs->GetComponent<TextComponent>(childID);
                     TransformComponent* childTransform = ecs->GetComponent<TransformComponent>(childID);
-                    if (!textComp->fontGUID.empty())
+                    if (!textComp->fontGUID.Empty())
                     {
                         std::shared_ptr<R_Font> fontResource = rm->GetResource<R_Font>(textComp->fontGUID);
                         gm->gm_PushScreenTextData(ScreenTextData{ childTransform->WorldTransformation.position,

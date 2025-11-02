@@ -67,7 +67,7 @@ namespace gui {
 
 	ImGuiHandler::ImGuiHandler(Application::AppWindow& window) :m_window(window) {
 
-		m_ecs = ecs::ECS::GetInstance();
+		
 		RegisterCallBack();
 
 
@@ -78,6 +78,9 @@ namespace gui {
 
 	void ImGuiHandler::Initialize(GLFWwindow* window, const char* glsl_version, const std::string& editorTagsFile, const std::string& imguiINI)
 	{
+
+		m_ecs = ComponentRegistry::GetECSInstance();
+
 		m_imgui_layout = imguiINI;
 		//set up reflection
 
@@ -128,12 +131,11 @@ namespace gui {
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;// Enable Docking
 		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;// Enable Multi-Viewport / Platform Windows
 
-		SetStyle();
+		DeserializeProfile();
 
 		// Setup Platform/Renderer bindings
 		ImGui_ImplGlfw_InitForOpenGL(window, true);
 		ImGui_ImplOpenGL3_Init(glsl_version);
-
 
 		// load current layout
 		LoadLayout();
@@ -189,7 +191,7 @@ namespace gui {
 			//update while prefabmode is on
 			m_UpdateOnPrefabMode();
 
-			ecs::ECS* ecs = ecs::ECS::GetInstance();
+			ecs::ECS* ecs =ComponentRegistry::GetECSInstance();
 
 			//check if "m_activeScene", if not find first active scene
 			const auto& scene = ecs->sceneMap.find(m_activeScene);

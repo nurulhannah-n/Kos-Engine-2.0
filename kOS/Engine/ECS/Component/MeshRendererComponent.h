@@ -37,11 +37,11 @@ namespace ecs {
     class MeshRendererComponent : public Component {
 
     public:
-        std::string diffuseMaterialGUID{};   // Path or ID for material asset
-        std::string specularMaterialGUID{};
-        std::string normalMaterialGUID{};
-        std::string ambientOcclusionMaterialGUID{};
-        std::string roughnessMaterialGUID{};
+        utility::GUID diffuseMaterialGUID{};   // Path or ID for material asset
+        utility::GUID specularMaterialGUID{};
+        utility::GUID normalMaterialGUID{};
+        utility::GUID ambientOcclusionMaterialGUID{};
+        utility::GUID roughnessMaterialGUID{};
 
         REFLECTABLE(MeshRendererComponent, diffuseMaterialGUID, specularMaterialGUID, normalMaterialGUID, ambientOcclusionMaterialGUID, roughnessMaterialGUID);
 

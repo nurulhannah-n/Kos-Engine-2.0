@@ -34,7 +34,7 @@ namespace gui {
     unsigned int ImGuiHandler::DrawHierachyWindow()
     {
         //fetch ecs
-        ecs::ECS* ecs = ecs::ECS::GetInstance();
+        ecs::ECS* ecs =ComponentRegistry::GetECSInstance();
         scenes::SceneManager* scenemanager = scenes::SceneManager::m_GetInstance();
         //assetmanager::AssetManager* assetmanager = assetmanager::AssetManager::m_funcGetInstance();
         // Custom window with example widgets
@@ -275,10 +275,10 @@ namespace gui {
             ImGui::InvisibleButton("#invbut", ImVec2{ ImGui::GetContentRegionAvail().x,ImGui::GetContentRegionAvail().y });
             if (ImGui::BeginDragDropTarget())
             {
-                if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Entity"))
+                if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("EntityPayload"))
                 {
-                    IM_ASSERT(payload->DataSize == sizeof(ecs::EntityID));
-                    ecs::EntityID Id = *static_cast<ecs::EntityID*>(payload->Data);
+                    IM_ASSERT(payload->DataSize == sizeof(EntityPayload));
+                    ecs::EntityID Id = static_cast<EntityPayload*>(payload->Data)->id;
 
                     // if in prefab mode and parent does not have parent, reject
                     if (m_prefabSceneMode && hierachy::GetParent(Id).has_value() && (!hierachy::GetParent(hierachy::GetParent(Id).value()).has_value())) {
@@ -288,15 +288,15 @@ namespace gui {
                         hierachy::m_SetParent(ecs->sceneMap.find(m_activeScene)->second.prefabID, Id);
                     }
                     else {
-                        hierachy::m_RemoveParent(Id);
+                        hierachy::m_RemoveParent(Id, true);
                     }
                 }
 
                 if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("file"))
                 {
                     //IM_ASSERT(payload->DataSize == sizeof(std::filesystem::path));
-                    IM_ASSERT(payload->DataSize == sizeof(AssetPathGUID));
-                    const AssetPathGUID* data = static_cast<const AssetPathGUID*>(payload->Data);
+                    IM_ASSERT(payload->DataSize == sizeof(AssetPayload));
+                    const AssetPayload* data = static_cast<const AssetPayload*>(payload->Data);
 
                     std::filesystem::path filePath = data->path;
  
@@ -318,7 +318,7 @@ namespace gui {
 
 
     bool ImGuiHandler::DrawEntityNode(ecs::EntityID id) {
-        ecs::ECS* ecs = ecs::ECS::GetInstance();
+        ecs::ECS* ecs =ComponentRegistry::GetECSInstance();
         
         ecs::TransformComponent* transCom = ecs->GetComponent<ecs::TransformComponent>(id);
         if (transCom == NULL) return false;
@@ -336,10 +336,10 @@ namespace gui {
 
         if (ImGui::BeginDragDropTarget())
         {
-            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Entity"))
+            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("EntityPayload"))
             {
-                IM_ASSERT(payload->DataSize == sizeof(ecs::EntityID));
-                ecs::EntityID SwapId = *static_cast<ecs::EntityID*>(payload->Data);
+                IM_ASSERT(payload->DataSize == sizeof(EntityPayload));
+                ecs::EntityID SwapId = static_cast<EntityPayload*>(payload->Data)->id;
 
                 const std::string swapScene = m_ecs->GetSceneByEntityID(SwapId);
                 const std::string idScene = m_ecs->GetSceneByEntityID(id);
@@ -381,7 +381,7 @@ namespace gui {
             if (ecs->HasComponent<ecs::CanvasRendererComponent>(id)
                 ||( hierachy::GetParent(m_clickedEntityId).has_value()&&
                     ecs->HasComponent<ecs::CanvasRendererComponent>(hierachy::GetParent(m_clickedEntityId).value()))) {
-                std::cout << "IS UI\n";
+                // std::cout << "IS UI\n";
                 m_isUi = true;
             }
         }
@@ -419,9 +419,7 @@ namespace gui {
             if (ImGui::MenuItem("Duplicate Entity")) {
                 ecs::EntityID newid = ecs->DuplicateEntity(id);
 
-                if (m_prefabSceneMode) {
-
-                    
+                if (m_prefabSceneMode) {                 
                     const auto& parent = hierachy::GetParent(id);
                     //if id does not have parent, make it the parent
                     if (!parent.has_value()) {
@@ -429,9 +427,7 @@ namespace gui {
                     }
                     else {
                         hierachy::m_SetParent(parent.value(), newid);
-                    }
-
-                   
+                    }                 
                 }
 
                 ImGui::EndPopup();
@@ -450,10 +446,10 @@ namespace gui {
 
         if (ImGui::BeginDragDropTarget())
         {           
-            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Entity"))
+            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("EntityPayload"))
             {
-                IM_ASSERT(payload->DataSize == sizeof(ecs::EntityID));
-                ecs::EntityID childId = *static_cast<ecs::EntityID*>(payload->Data);
+                IM_ASSERT(payload->DataSize == sizeof(EntityPayload));
+                ecs::EntityID childId = static_cast<EntityPayload*>(payload->Data)->id;
 
                 // dont allow prefabs to be dragged inside prefab
                 const auto& childnc = ecs->GetComponent<ecs::NameComponent>(childId);
@@ -484,10 +480,16 @@ namespace gui {
         if (!transCom->m_haveParent || !ecs->GetComponent<ecs::NameComponent>(transCom->m_parentID)->isPrefab ||
             ecs->GetComponent<ecs::NameComponent>(transCom->m_parentID)->prefabName != nc->prefabName || m_prefabSceneMode) {
             if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None)) {
-                //might undefine behaviour
-                ecs::EntityID index = id;
-                ImGui::SetDragDropPayload("Entity", &index, sizeof(ecs::EntityID));
-                ImGui::Text(nc->entityName.c_str());
+                auto* nc = m_ecs->GetComponent<ecs::NameComponent>(id);
+                if (nc) {
+                    EntityPayload payload{ id, nc->entityGUID };
+
+                    ImGui::SetDragDropPayload("EntityPayload", &payload, sizeof(EntityPayload));
+                    ImGui::Text("%s", nc->entityName.c_str());
+                    if (!nc->entityGUID.Empty())
+                        ImGui::Text("%s", nc->entityGUID.GetToString().c_str());    
+                
+                }
                 ImGui::EndDragDropSource();
             }
         }        

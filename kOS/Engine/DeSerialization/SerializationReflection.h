@@ -13,6 +13,7 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 /******************************************************************/
 #pragma once
 
+#include "Config/pch.h"
 #include <RAPIDJSON/document.h>
 #include <RAPIDJSON/writer.h>
 #include <RAPIDJSON/stringbuffer.h>
@@ -87,6 +88,13 @@ struct SaveComponent {
 	void operator()(std::string& _args, rapidjson::Value& value, rapidjson::Document::AllocatorType& allocator) {
 		rapidjson::Value jsonString;
 		jsonString.SetString(_args.c_str(), allocator); // Set the string
+		value.AddMember(rapidjson::Value(m_Array[count].c_str(), allocator), jsonString, allocator); // Add the key-value pair
+		count++;
+	}
+
+	void operator()(utility::GUID& _args, rapidjson::Value& value, rapidjson::Document::AllocatorType& allocator) {
+		rapidjson::Value jsonString;
+		jsonString.SetString(_args.GetToString().c_str(), allocator); // Set the string
 		value.AddMember(rapidjson::Value(m_Array[count].c_str(), allocator), jsonString, allocator); // Add the key-value pair
 		count++;
 	}
@@ -259,6 +267,13 @@ struct LoadComponent {
 		count++;
 	}
 
+	void operator()(utility::GUID& _args, const rapidjson::Value& value) {
+		if (value.HasMember(m_Array[count].c_str()) && value[m_Array[count].c_str()].IsString()) {
+			_args.SetFromString(value[m_Array[count].c_str()].GetString());
+		}
+
+		count++;
+	}
 
 	template <typename EnumType>
 		requires std::is_enum_v<EnumType>

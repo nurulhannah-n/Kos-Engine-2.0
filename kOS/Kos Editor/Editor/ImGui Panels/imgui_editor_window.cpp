@@ -52,7 +52,7 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 
 void gui::ImGuiHandler::DrawRenderScreenWindow(unsigned int windowWidth, unsigned int windowHeight)
 {
-    ecs::ECS* ecs = ecs::ECS::GetInstance();
+    ecs::ECS* ecs =ComponentRegistry::GetECSInstance();
 
     ImGuiWindowFlags window_flags = 0;
     window_flags |= ImGuiWindowFlags_MenuBar;
@@ -134,7 +134,16 @@ void gui::ImGuiHandler::DrawRenderScreenWindow(unsigned int windowWidth, unsigne
         //std::cout << "Clicked pixerl val is " << --pixelVal << '\n';
         --pixelVal;
         m_clickedEntityId =pixelVal>=0? pixelVal: m_clickedEntityId;
-        //std::cout << "PixelVal is " << pixelVal << '\n';
+        std::cout << "PixelVal is " << pixelVal << '\n';
+        if (ecs->HasComponent<ecs::CanvasRendererComponent>(pixelVal)
+            || (hierachy::GetParent(m_clickedEntityId).has_value() &&
+                ecs->HasComponent<ecs::CanvasRendererComponent>(hierachy::GetParent(m_clickedEntityId).value()))) {
+            std::cout << "IS UI\n";
+            m_isUi = true;
+        }
+        else {
+            m_isUi = false;
+        }
         //Get texture
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
         glDeleteFramebuffers(1, &fbo);
@@ -347,7 +356,7 @@ void gui::ImGuiHandler::DrawRenderScreenWindow(unsigned int windowWidth, unsigne
     ImGui::Dummy(renderWindowSize);
     if (ImGui::BeginDragDropTarget()) {
         //if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("file")) {
-        //    ecs::ECS* ecs = ecs::ECS::GetInstance();
+        //    ecs::ECS* ecs =ComponentRegistry::GetECSInstance();
 
         //    IM_ASSERT(payload->DataSize == sizeof(std::filesystem::path));
         //    std::filesystem::path* filename = static_cast<std::filesystem::path*>(payload->Data);

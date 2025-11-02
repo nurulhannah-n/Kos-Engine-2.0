@@ -32,7 +32,7 @@ namespace ecs {
     class MeshFilterComponent : public Component {
 
     public:
-        std::string meshGUID{};   // Path or ID for mesh asset
+        utility::GUID meshGUID{};   // Path or ID for mesh asset
 
         REFLECTABLE(MeshFilterComponent, meshGUID);
     };

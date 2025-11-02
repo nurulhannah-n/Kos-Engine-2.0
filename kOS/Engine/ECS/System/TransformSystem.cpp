@@ -57,7 +57,7 @@ namespace ecs {
 
 		CalculateLocalTransformMtx(transformComp);
 		transformComp->transformation = transformComp->m_haveParent ? parentWorldMtx * transformComp->localTransform : transformComp->localTransform;
-		math::DecomposeMtxIntoTRS(transformComp->transformation, transformComp->WorldTransformation.position, transformComp->WorldTransformation.rotation, transformComp->WorldTransformation.scale);
+		utility::DecomposeMtxIntoTRS(transformComp->transformation, transformComp->WorldTransformation.position, transformComp->WorldTransformation.rotation, transformComp->WorldTransformation.scale);
 		for (const EntityID childID : transformComp->m_childID) {
 			TransformComponent* child = ECS::GetInstance()->GetComponent<TransformComponent>(childID);
 			if (child) {
@@ -87,7 +87,7 @@ namespace ecs {
 		TransformComponent* parentTrans = ECS::GetInstance()->GetComponent<TransformComponent>(transformComp->m_parentID);
 		if (parentTrans) {
 			transformComp->localTransform = glm::inverse(parentTrans->transformation) * transformComp->transformation;
-			math::DecomposeMtxIntoTRS(transformComp->localTransform, transformComp->LocalTransformation.position, transformComp->LocalTransformation.rotation, transformComp->LocalTransformation.scale);
+			utility::DecomposeMtxIntoTRS(transformComp->localTransform, transformComp->LocalTransformation.position, transformComp->LocalTransformation.rotation, transformComp->LocalTransformation.scale);
 		}
 		else {
 			transformComp->LocalTransformation.position = transformComp->WorldTransformation.position;
@@ -106,7 +106,7 @@ namespace ecs {
 		TransformComponent* parentTrans = ECS::GetInstance()->GetComponent<TransformComponent>(transformComp->m_parentID);
 		if (parentTrans) {
 			transformComp->localTransform = glm::inverse(parentTrans->transformation) * transformComp->transformation;
-			math::DecomposeMtxIntoTRS(transformComp->localTransform, transformComp->LocalTransformation.position, transformComp->LocalTransformation.rotation, transformComp->LocalTransformation.scale);
+			utility::DecomposeMtxIntoTRS(transformComp->localTransform, transformComp->LocalTransformation.position, transformComp->LocalTransformation.rotation, transformComp->LocalTransformation.scale);
 		}
 		else {
 			transformComp->LocalTransformation.rotation = transformComp->WorldTransformation.rotation;
@@ -125,7 +125,7 @@ namespace ecs {
 		TransformComponent* parentTrans = ECS::GetInstance()->GetComponent<TransformComponent>(transformComp->m_parentID);
 		if (parentTrans) {
 			transformComp->localTransform = glm::inverse(parentTrans->transformation) * transformComp->transformation;
-			math::DecomposeMtxIntoTRS(transformComp->localTransform, transformComp->LocalTransformation.position, transformComp->LocalTransformation.rotation, transformComp->LocalTransformation.scale);
+			utility::DecomposeMtxIntoTRS(transformComp->localTransform, transformComp->LocalTransformation.position, transformComp->LocalTransformation.rotation, transformComp->LocalTransformation.scale);
 		}
 		else {
 			transformComp->LocalTransformation.scale = transformComp->WorldTransformation.scale;

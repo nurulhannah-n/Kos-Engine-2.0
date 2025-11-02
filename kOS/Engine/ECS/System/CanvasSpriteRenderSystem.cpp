@@ -56,20 +56,20 @@ namespace ecs {
 
             for (EntityID childID : childEntities.value())
             {
-                std::shared_ptr<ResourceManager> rm = ResourceManager::GetInstance();
+                 ResourceManager* rm = ResourceManager::GetInstance();
                 std::shared_ptr<GraphicsManager> gm = GraphicsManager::GetInstance();
                 if (ecs->HasComponent<SpriteComponent>(childID))
                 {
                     SpriteComponent* spriteComp = ecs->GetComponent<SpriteComponent>(childID);
                     TransformComponent* childTransform = ecs->GetComponent<TransformComponent>(childID);
-                    if (!spriteComp->spriteGUID.empty())
+                    if (!spriteComp->spriteGUID.Empty())
                     {
                         std::shared_ptr<R_Texture> fontResource = rm->GetResource<R_Texture>(spriteComp->spriteGUID);
                         gm->gm_PushScreenSpriteData(ScreenSpriteData{ childTransform->WorldTransformation.position,
                                                            glm::vec2{ childTransform->WorldTransformation.scale.x, 
                                                                       childTransform->WorldTransformation.scale.y},
                                                                       -childTransform->WorldTransformation.rotation.x, spriteComp->color,
-                                                                      fontResource.get(), 0, 0, 0 }); /// Temporarily all 0
+                                                                      fontResource.get(), 0, 0, 0,childID }); /// Temporarily all 0
                     }
                 }
 

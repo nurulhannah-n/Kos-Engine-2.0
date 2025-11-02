@@ -121,6 +121,15 @@ struct RandomizeComponents{
         count++;
     }
 
+    void operator()(utility::GUID& _args) {
+
+
+        _args.high = RandomInt();
+        _args.low = RandomInt();
+
+        count++;
+    }
+
     template <typename U>
     void operator()(std::vector<U>& _args) {
 

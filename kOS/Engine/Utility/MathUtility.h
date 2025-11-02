@@ -19,7 +19,7 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 #define GLM_ENABLE_EXPERIMENTAL
 #include "glm/gtx/quaternion.hpp" // for glm::quat
 
-namespace math{
+namespace utility{
 	void DecomposeMtxIntoTRS(glm::mat4 const& mtx, glm::vec3& position, glm::vec3& rotation, glm::vec3& scale);
 }
 

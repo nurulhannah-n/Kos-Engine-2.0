@@ -149,7 +149,7 @@ void GraphicsManager::gm_RenderToEditorFrameBuffer()
 	gm_RenderUIObjects(editorCamera);
 
 	Shader* fboCompositeShader{ &shaderManager.engineShaders.find("FBOCompositeShader")->second };
-	framebufferManager.ComposeBuffers(framebufferManager.sceneBuffer, framebufferManager.UIBuffer,
+	framebufferManager.ComposeBuffers(framebufferManager.sceneBuffer.texID, framebufferManager.UIBuffer.texID,
 		framebufferManager.editorBuffer, *fboCompositeShader);
 
 
@@ -170,7 +170,7 @@ void GraphicsManager::gm_RenderToGameFrameBuffer()
 	gm_RenderUIObjects(gameCameras[currentGameCameraIndex]);
 
 	Shader* fboCompositeShader{ &shaderManager.engineShaders.find("FBOCompositeShader")->second };
-	framebufferManager.ComposeBuffers(framebufferManager.sceneBuffer, framebufferManager.UIBuffer,
+	framebufferManager.ComposeBuffers(framebufferManager.sceneBuffer.texID, framebufferManager.UIBuffer.texID,
 		framebufferManager.gameBuffer, *fboCompositeShader);
 }
 
@@ -190,8 +190,9 @@ void GraphicsManager::gm_FillGBuffer(const CameraData& camera)
 	//Render to G buffer 
 	framebufferManager.gBuffer.BindGBuffer();
 	Shader* gBufferPBRShader{ &shaderManager.engineShaders.find("GBufferPBRShader")->second };
+	Shader* gBufferDebugShader{ &shaderManager.engineShaders.find("GBufferDebugShader")->second };
+
 	gBufferPBRShader->Use();
-	gBufferPBRShader->SetFloat("uShaderType", 0.f);
 	gBufferPBRShader->SetTrans("projection", camera.GetPerspMtx()); // note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
 	gBufferPBRShader->SetTrans("view", camera.GetViewMtx());
 	gBufferPBRShader->SetVec3("cameraPosition", camera.position);
@@ -201,12 +202,17 @@ void GraphicsManager::gm_FillGBuffer(const CameraData& camera)
 	meshRenderer.Render(camera, *gBufferPBRShader);
 	skinnedMeshRenderer.Render(camera, *gBufferPBRShader);
 	cubeRenderer.Render(camera, *gBufferPBRShader, &this->cube);
-	//Render debug objects if any
 	debugRenderer.RenderPointLightDebug(camera, *gBufferPBRShader, lightRenderer.pointLightsToDraw);
 	debugRenderer.RenderDebugFrustums(camera, *gBufferPBRShader, gameCameras);
-	debugRenderer.RenderDebugCubes(camera, *gBufferPBRShader);
 
 	gBufferPBRShader->Disuse();
+
+	gBufferDebugShader->Use();
+	gBufferDebugShader->SetTrans("view", camera.GetViewMtx());
+	gBufferDebugShader->SetTrans("projection", camera.GetPerspMtx()); // note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
+	//Render debug objects if any
+	debugRenderer.RenderDebugCubes(camera, *gBufferDebugShader);
+	gBufferDebugShader->Disuse();
 
 
 }
@@ -446,7 +452,7 @@ void GraphicsManager::gm_RenderDeferredObjects(const CameraData& camera)
 
 	//Fill point shadow stuff
 	for (int i = 0; i < lightRenderer.pointLightsToDraw.size(); i++) {
-		if (lightRenderer.pointLightsToDraw[i].bakedCon&& lightRenderer.pointLightsToDraw[i].bakedmapGUID.size()) {
+		if (lightRenderer.pointLightsToDraw[i].bakedCon&& !lightRenderer.pointLightsToDraw[i].bakedmapGUID.Empty()) {
 			std::shared_ptr<R_DepthMapCube> dmc = ResourceManager::GetInstance()->GetResource<R_DepthMapCube>(lightRenderer.pointLightsToDraw[i].bakedmapGUID);
 			glActiveTexture(GL_TEXTURE7 + i);
 			glBindTexture(GL_TEXTURE_CUBE_MAP, dmc->dcm.RetrieveID());

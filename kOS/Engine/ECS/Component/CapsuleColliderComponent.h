@@ -22,13 +22,13 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 #define CAPSULECOLLIDERCOMPONENT_H
 
 #include "Component.h"
-#include "Shapes/Shapes.h"
+#include "Utility/Shapes.h"
 
 namespace ecs {
 	class CapsuleColliderComponent : public Component {
 	public:
 		bool isTrigger = false;
-		shapes::Capsule capsule;
+		utility::Capsule capsule;
 		void* actor = nullptr;
 		void* shape = nullptr;
 

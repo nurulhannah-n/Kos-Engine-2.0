@@ -22,13 +22,13 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 #define SPHERECOLLIDERCOMPONENT_H
 
 #include "Component.h"
-#include "Shapes/Shapes.h"
+#include "Utility/Shapes.h"
 
 namespace ecs {
 	class SphereColliderComponent : public Component {
 	public:
 		bool isTrigger = false;
-		shapes::Sphere sphere;
+		utility::Sphere sphere;
 		void* actor = nullptr;
 		void* shape = nullptr;
 

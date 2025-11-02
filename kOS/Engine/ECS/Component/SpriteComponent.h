@@ -22,7 +22,7 @@ namespace ecs {
 	class SpriteComponent : public Component {
 
 	public:
-		std::string spriteGUID{};
+		utility::GUID spriteGUID{};
 		glm::vec4 color{ 1.f,1.f,1.f,1.f };
 		
 		REFLECTABLE(SpriteComponent, spriteGUID, color);

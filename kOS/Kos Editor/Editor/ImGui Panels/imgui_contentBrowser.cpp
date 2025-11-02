@@ -81,7 +81,7 @@ namespace gui {
 
 		AssetManager* assetmanager = AssetManager::GetInstance();
 		scenes::SceneManager* scenemanager = scenes::SceneManager::m_GetInstance();
-		ecs::ECS* ecs = ecs::ECS::GetInstance();
+		ecs::ECS* ecs =ComponentRegistry::GetECSInstance();
 
 		static std::filesystem::path assetDirectory = assetmanager->GetAssetManagerDirectory(); // TO change
 		static std::filesystem::path currentDirectory = assetDirectory;
@@ -272,16 +272,16 @@ namespace gui {
 					}
 
 					if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None)) {
-						std::string GUID = assetmanager->GetGUIDfromFilePath(directoryPath.path());
+						AssetPayload data;
+						data.GUID = assetmanager->GetGUIDfromFilePath(directoryPath.path());
 						std::string filepath = directoryPath.path().string();
-						AssetPathGUID data;
+						
 						std::strncpy(data.path, filepath.c_str(), sizeof(data.path) - 1);
-						std::strncpy(data.GUID, GUID.c_str(), sizeof(data.GUID) - 1);
 
 						ImGui::SetDragDropPayload("file", &data, sizeof(data));
 
-						if (!GUID.empty()) {
-							ImGui::Text(GUID.c_str());
+						if (!data.GUID.Empty()) {
+							ImGui::Text(data.GUID.GetToString().c_str());
 						}	
 						else {
 							ImGui::Text(filepath.c_str());

@@ -9,27 +9,21 @@ enum class Arguments {
 };
 struct AssetData
 {
-	std::string GUID;
+	utility::GUID GUID;
 	std::string Type;
 	Arguments Arg1 = Arguments::None;
 
 	REFLECTABLE(AssetData, GUID, Type, Arg1);
 };
 
-struct AssetPathGUID {
-	char path[260];
-	char GUID[64];
-	REFLECTABLE(AssetPathGUID, path, GUID);
-};;
+
 
 class AssetDatabase {
 	//return GUID
 public:
-	std::string ImportAsset(std::filesystem::path filePath, const std::string& type);
+	utility::GUID ImportAsset(std::filesystem::path filePath, const std::string& type);
 
-	std::string GenerateRandomGUID();
-
-	std::string GetGUID(std::filesystem::path filePath) {
+	utility::GUID GetGUID(std::filesystem::path filePath) {
 		if (m_pathToGUID.find(filePath) == m_pathToGUID.end()) {
 			throw std::runtime_error("Asset not imported to Database");
 		}
@@ -38,7 +32,7 @@ public:
 	}
 
 private:
-	std::unordered_map<std::filesystem::path, std::string> m_pathToGUID;
+	std::unordered_map<std::filesystem::path, utility::GUID> m_pathToGUID;
 
 };
 

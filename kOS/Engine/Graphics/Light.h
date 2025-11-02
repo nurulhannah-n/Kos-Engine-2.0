@@ -33,7 +33,7 @@ struct PointLightData {
 		position(pos), color(col), diffuseStrength(diff), specularStrength(spec), linear(lin), quadratic(quad), intensity{ inten } {
 
 	};
-	PointLightData(glm::vec3 pos, glm::vec3 col, glm::vec3 diff, glm::vec3 spec, float lin, float quad, float inten, bool shadowCast, bool bc = false, std::string bmGUID = std::string{}) :
+	PointLightData(glm::vec3 pos, glm::vec3 col, glm::vec3 diff, glm::vec3 spec, float lin, float quad, float inten, bool shadowCast, bool bc = false, utility::GUID bmGUID = utility::GUID{}) :
 		position(pos), color(col), diffuseStrength(diff), specularStrength(spec), linear(lin), quadratic(quad), intensity{ inten }, shadowCon{ shadowCast }, bakedCon{ bc }, bakedmapGUID{ bmGUID } {
 	};
 
@@ -46,7 +46,7 @@ struct PointLightData {
 	float quadratic{ 0.032f };
 	bool shadowCon; 
 	bool bakedCon;
-	std::string bakedmapGUID;
+	utility::GUID bakedmapGUID;
 	static glm::vec3  ambientStrength;
 	virtual void SetUniform(Shader* shader, size_t number);
 	virtual void SetShaderMtrx(Shader* shader, size_t number);

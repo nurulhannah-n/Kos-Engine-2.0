@@ -17,7 +17,6 @@ file(GLOB_RECURSE ENGINE_SOURCE
     Reflection/*.cpp
     Resources/*.cpp
     Scripting/*.cpp
-    Shapes/*.cpp
     Scene/*.cpp
     Utility/*.cpp
     Events/*.cpp

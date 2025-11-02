@@ -53,7 +53,7 @@ void AssetManager::Init(const std::string& assetDirectory, const std::string& re
                     for (const auto& compilerData : map)
                     {
                         std::string type = compilerData.type;
-                        std::string outputResourcePath = std::filesystem::absolute(m_resourceDirectory).string() + "/" + data.GUID + compilerData.outputExtension;
+                        std::string outputResourcePath = std::filesystem::absolute(m_resourceDirectory).string() + "/" + data.GUID.GetToString() + compilerData.outputExtension;
                         if (!std::filesystem::exists(outputResourcePath)) {
                             std::cout << ++count << std::endl;
                             compilingAsync.push_back(Compilefile(filepath));
@@ -124,21 +124,21 @@ void AssetManager::Init(const std::string& assetDirectory, const std::string& re
 
 
 
-std::string AssetManager::RegisterAsset(const std::filesystem::path& filePath)
+utility::GUID AssetManager::RegisterAsset(const std::filesystem::path& filePath)
 {
 	std::string inputExtension = filePath.extension().string();
 	//check if compiler have been registered 
 	if (m_compilerMap.find(inputExtension) == m_compilerMap.end()) {
 		//LOGGING_WARN("RegisterAsset: " + inputExtension + " not found");
-        return std::string{};
+        return utility::GUID{};
 	}
     
     const std::string& type = m_compilerMap.at(inputExtension).front().type;
 
-    std::string GUID = m_dataBase.ImportAsset(filePath, type);
+    utility::GUID GUID = m_dataBase.ImportAsset(filePath, type);
 
     m_GUIDtoFilePath[GUID] = filePath;
-    return GUID;;
+    return GUID;
 }
 
 std::future<void> AssetManager::Compilefile(const std::filesystem::path& filePath)
@@ -176,12 +176,12 @@ std::future<void> AssetManager::Compilefile(const std::filesystem::path& filePat
     const auto& map = m_compilerMap.at(inputExtension);
     for(const auto& compilerData : map)
     {
-        std::string guid = data.GUID;
+        std::string guid = data.GUID.GetToString();
 
         std::string inputPath = std::filesystem::absolute(filePath).string();
         std::string outputResourcePath =
             std::filesystem::absolute(m_resourceDirectory).string() + "\\" +
-            data.GUID + compilerData.outputExtension;
+            guid + compilerData.outputExtension;
 
 
         //assets that have a compiler

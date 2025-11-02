@@ -73,7 +73,7 @@ namespace ecs {
             //Loop through all audio files
             for (auto& af : audioComp->audioFiles) {
                 if (!af.requestPlay) continue;
-                if (af.audioGUID.empty()) continue;
+                if (af.audioGUID.Empty()) continue;
 
                 //Get GUID
                 auto res = rm->GetResource<R_Audio>(af.audioGUID);

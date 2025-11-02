@@ -25,13 +25,13 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 #define BOXCOLLIDERCOMPONENT_H
 
 #include "Component.h"
-#include "Shapes/Shapes.h"
+#include "Utility/Shapes.h"
 
 namespace ecs {
 	class BoxColliderComponent : public Component {
 	public:
 		bool isTrigger = false;
-		shapes::Box box;
+		utility::Box box;
 		void* actor = nullptr;
 		void* shape = nullptr;
 

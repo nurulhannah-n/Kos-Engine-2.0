@@ -24,6 +24,7 @@ struct Material
 };
 uniform Material material;
 uniform int entityID=-1;
+uniform vec3 color;
 void main()
 {    
     // store the fragment position vector in the first gbuffer texture
@@ -31,8 +32,9 @@ void main()
     // also store the per-fragment normals into the gbuffer
     gNormal = (texture2D(texture_normal1, TexCoords).rgb * 2.0 - 1.0) * tangentToWorld;
     // and the diffuse per-fragment color
-    gAlbedoSpec.rgb = texture(texture_diffuse1, TexCoords).rgb;
-    // store specular intensity in gAlbedoSpec's alpha component
+    gAlbedoSpec.rgb =color;
+    gAlbedoSpec.rgb *= texture(texture_diffuse1, TexCoords).rgb;
+    //store specular intensity in gAlbedoSpec's alpha component
     gAlbedoSpec.a = texture(texture_specular1, TexCoords).r;
     gReflect=ReflectDir;
     gMaterial.r=texture(texture_ao1, TexCoords).g;

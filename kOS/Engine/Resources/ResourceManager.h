@@ -41,17 +41,18 @@ public:
 		RegisterResourceType<R_Audio>(".wav");
 		RegisterResourceType<R_Material>(".mat");
 		RegisterResourceType<R_DepthMapCube>(".dcm");
+		RegisterResourceType<R_DepthMapCube>(".prefab");
         //Wait for texture type
     }
 
 	~ResourceManager() = default;
 
-    static std::shared_ptr<ResourceManager> GetInstance() {
+    static ResourceManager* GetInstance() {
         if (!m_instancePtr)
         {
             m_instancePtr = std::make_shared<ResourceManager>();
         }
-        return m_instancePtr;
+        return m_instancePtr.get();
     }
 
 	void Init(const std::string& Directory) {
@@ -63,9 +64,9 @@ public:
 
 
 	template<typename T>
-	std::shared_ptr<T> GetResource(const std::string& GUID) {
+	std::shared_ptr<T> GetResource(const utility::GUID& GUID) {
 		//check if resrouce is already loaded
-		if (GUID.empty()) return nullptr;
+		if (GUID.Empty()) return nullptr;
 
 		if (m_resourceMap.find(GUID) != m_resourceMap.end()) {
 
@@ -85,7 +86,7 @@ public:
 		//Asset not loaded
 
         //create file path
-        std::string path = m_resourceDirectory + "/" + GUID + m_resourceExtension.at(className);
+        std::string path = m_resourceDirectory + "/" + GUID.GetToString() + m_resourceExtension.at(className);
 
 		//Check if file path exists
 
@@ -102,7 +103,7 @@ public:
 	inline void CollectGarbage() {
 		for (auto it = m_resourceMap.begin(); it != m_resourceMap.end();) {
 			if (it->second.use_count() == 1) {
-				LOGGING_INFO("Unloading Asset UID: " + it->first);
+				LOGGING_INFO("Unloading Asset UID: " + it->first.GetToString());
 				it->second->Unload();
 				it = m_resourceMap.erase(it);
 			}
@@ -129,6 +130,6 @@ private:
 
 
 	//Key - GUID
-	std::unordered_map<std::string, std::shared_ptr<Resource>> m_resourceMap;
+	std::unordered_map<utility::GUID, std::shared_ptr<Resource>> m_resourceMap;
 	std::string m_resourceDirectory;
 };

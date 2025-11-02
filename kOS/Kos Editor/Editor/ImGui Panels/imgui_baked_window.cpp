@@ -26,7 +26,7 @@ void gui::ImGuiHandler::DrawBakedWindow() {
 	std::shared_ptr<GraphicsManager> gm = GraphicsManager::GetInstance();
 	if (ImGui::Button("Bake Lights"))
 	{
-		ecs::ECS* ecs = ecs::ECS::GetInstance();
+		ecs::ECS* ecs =ComponentRegistry::GetECSInstance();
 
 		LOGGING_INFO("It's a piece of cake to bake a pretty cake");
 		//Just bake first light first
@@ -48,7 +48,7 @@ void gui::ImGuiHandler::DrawBakedWindow() {
 			//Generate GUID
 			// Attach name
 			//KEEP THIS
-			std::string filepath = AssetManager::AssetManager::GetInstance()->GetAssetManagerDirectory() + "/DepthMap/" + GenerateRandomGUIDBaked()+ ".dcm";
+			std::string filepath = AssetManager::AssetManager::GetInstance()->GetAssetManagerDirectory() + "/DepthMap/" + std::to_string(lcComp) + ".dcm";
 			gm->lightRenderer.dcm[i].SaveDepthCubeMap(filepath);
 
 			

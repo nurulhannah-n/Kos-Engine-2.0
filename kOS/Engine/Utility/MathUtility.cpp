@@ -15,7 +15,7 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 #include "Config/pch.h"
 #include "MathUtility.h"
 
-void math::DecomposeMtxIntoTRS(glm::mat4 const& mtx, glm::vec3& position, glm::vec3& rotation, glm::vec3& scale) {
+void utility::DecomposeMtxIntoTRS(glm::mat4 const& mtx, glm::vec3& position, glm::vec3& rotation, glm::vec3& scale) {
 	position = mtx[3];
 	scale = glm::vec3(glm::length(mtx[0]), glm::length(mtx[1]), glm::length(mtx[2]));
 	glm::mat3 rotationMtx;

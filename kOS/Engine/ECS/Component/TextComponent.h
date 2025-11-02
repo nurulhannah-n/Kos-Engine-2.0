@@ -32,7 +32,7 @@ namespace ecs {
 	class TextComponent : public Component {
 
 	public:
-		std::string fontGUID{};
+		utility::GUID fontGUID{};
 		std::string text{};
 		glm::vec3 color{ 1.f,1.f,1.f };
 		float fontSize{ 128.f };

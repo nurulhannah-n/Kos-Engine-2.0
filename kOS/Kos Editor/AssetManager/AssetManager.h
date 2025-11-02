@@ -22,7 +22,7 @@ public:
 
     void Init(const std::string& assetDirectory, const std::string& resourceDirectory);
 
-    std::string RegisterAsset(const std::filesystem::path& filepath);
+    utility::GUID RegisterAsset(const std::filesystem::path& filepath);
 
     std::future<void> Compilefile(const std::filesystem::path& filepath);
 
@@ -35,15 +35,15 @@ public:
         return m_extensionRegistry.at(extension);
     }
 
-    inline std::string GetGUIDfromFilePath(std::filesystem::path filepath) {
+    inline utility::GUID GetGUIDfromFilePath(std::filesystem::path filepath) {
 
-        std::string GUID;
+        utility::GUID GUID;
         try {
             GUID = m_dataBase.GetGUID(filepath);
         }
         catch (const std::runtime_error& e) {
             LOGGING_WARN("Runtime error: " + std::string(e.what()));
-            return std::string{};
+            return  utility::GUID();
         }
 
         return GUID;
@@ -75,7 +75,7 @@ private:
     static std::shared_ptr<AssetManager> m_instancePtr;
 
     //Key - GUID
-    std::unordered_map <std::string, std::filesystem::path> m_GUIDtoFilePath;
+    std::unordered_map <utility::GUID, std::filesystem::path> m_GUIDtoFilePath;
 
     //extension registry
     std::unordered_map<std::string, std::string> m_extensionRegistry;

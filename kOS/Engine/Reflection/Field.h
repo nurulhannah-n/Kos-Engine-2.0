@@ -27,24 +27,6 @@ struct FieldReference {
     template <typename T>
     T& AsType() const { return *static_cast<T*>(address); }
 
-
- //   // Type checks
- //   bool is_int() const { return type_name == typeid(int).name(); }
- //   bool is_float() const { return type_name == typeid(float).name(); }
- //   bool is_bool() const { return type_name == typeid(bool).name(); }
- //   bool is_string() const { return type_name == typeid(std::string).name(); }
- //   bool is_vec3() const { return type_name == typeid(glm::vec3).name(); }
-	//bool is_vec2() const { return type_name == typeid(glm::vec2).name(); }
-	//bool is_vec4() const { return type_name == typeid(glm::vec4).name(); }
-
- //   // Get typed references
- //   int& as_int() const { return *static_cast<int*>(address); }
- //   float& as_float() const { return *static_cast<float*>(address); }
- //   bool& as_bool() const { return *static_cast<bool*>(address); }
- //   std::string& as_string() const { return *static_cast<std::string*>(address); }
-	//glm::vec3& as_vec3() const { return *static_cast<glm::vec3*>(address); }
-	//glm::vec2& as_vec2() const { return *static_cast<glm::vec2*>(address); }
-	//glm::vec4& as_vec4() const { return *static_cast<glm::vec4*>(address); }
 };
 
 class FieldReferenceCollector {

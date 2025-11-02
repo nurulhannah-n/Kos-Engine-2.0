@@ -19,20 +19,20 @@ class Resource{
 
 public:
 	Resource() = delete;
-	Resource(std::string GUID, std::filesystem::path filepath):m_GUID(GUID), m_filePath(filepath) {}
+	Resource(utility::GUID GUID, std::filesystem::path filepath):m_GUID(GUID), m_filePath(filepath) {}
 
 	virtual ~Resource() noexcept = default;
 
 	virtual void Load() = 0;
 	virtual void Unload() = 0;
 
-	const inline std::string GetGUID() const { return m_GUID; }
+	const inline utility::GUID GetGUID() const { return m_GUID; }
 	const inline std::filesystem::path GetFilePath() const { return m_filePath; }
 
 
 protected:
 
-	std::string m_GUID;
+	utility::GUID m_GUID;
 	std::filesystem::path m_filePath;
 
 };

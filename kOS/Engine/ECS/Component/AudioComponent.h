@@ -36,7 +36,7 @@ namespace ecs {
 
         bool requestPlay{ false };
 
-        std::string audioGUID{};
+        utility::GUID audioGUID{};
 
 
         REFLECTABLE(AudioFile, audioGUID, volume, loop, playOnStart, hasPlayed, pan, isBGM, isSFX)

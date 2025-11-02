@@ -17,6 +17,7 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 #include "ECS/ECS.h"
 #include "Scene/SceneManager.h"
 #include "Utility/MathUtility.h"
+#include "Config/ComponentRegistry.h"
 #include "glm/gtx/euler_angles.hpp"
 #include <glm/gtx/matrix_decompose.hpp>
 #include <glm/gtx/string_cast.hpp>
@@ -53,7 +54,7 @@ TEST(Scene, CreateScene) {
 
 
 TEST(Entity, SpawnMaxEntities) {
-	auto* ecs = ecs::ECS::GetInstance();
+	auto* ecs =ComponentRegistry::GetECSInstance();
 	ecs->RegisterComponent<TransformComponent>();
 	ecs->RegisterComponent<NameComponent>();
 
@@ -109,7 +110,7 @@ TEST(Math, RandomDecomposeTRS) {
 
         // Decompose
         glm::vec3 decPos, decRot, decScale;
-        math::DecomposeMtxIntoTRS(transform, decPos, decRot, decScale);
+        utility::DecomposeMtxIntoTRS(transform, decPos, decRot, decScale);
 
         // Compare position
         EXPECT_TRUE(glm::all(glm::epsilonEqual(pos, decPos, EPS_POS)))

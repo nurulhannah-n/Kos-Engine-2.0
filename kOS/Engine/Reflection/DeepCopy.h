@@ -55,7 +55,6 @@ struct DeepCopyComponents {
         count++;
     }
 
-
     // std::vector
     template <typename U>
     void operator()(std::vector<U>& dest, const std::vector<U>& source) {
@@ -83,7 +82,7 @@ struct DeepCopyComponents {
             dest.ApplyFunctionPairwise(*this, source); // recurse into reflected fields
         }
         else {
-            dest = source; // fallback copy
+            dest = source; // fallback shallow copy
         }
         count++;
     }

@@ -6,7 +6,7 @@ struct WindowSettings {
 	int windowHeight;
 	int gameResWidth;
 	int gameResHeight;
-	std::string startScene;
+	utility::GUID startScene;
 
 	REFLECTABLE(WindowSettings, windowWidth, windowHeight, gameResWidth, gameResHeight, startScene);
 };

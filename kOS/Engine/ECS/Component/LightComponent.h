@@ -61,7 +61,7 @@ namespace ecs {
         //STRICTLY FOR POINT LIGHTS ONLY
         bool shadowCast;
         bool bakedLighting;
-        std::string depthMapGUID;
+        utility::GUID depthMapGUID;
         //std::string bakedMap;
         REFLECTABLE(LightComponent, lightType, color, diffuseStrength, specularStrength, linear,
             quadratic, direction, cutOff, outerCutOff, intesnity,shadowCast,bakedLighting, depthMapGUID);

@@ -26,7 +26,8 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 #include "Editor/EditorReflection.h"
 #include "Application/Window.h"
 #include "AssetManager/AssetDatabase.h"
-
+#include "Config/ComponentRegistry.h"
+#include "Editor/Payload.h"
 
 
 namespace gui {
@@ -142,6 +143,7 @@ namespace gui {
         void m_UpdateOnPrefabMode();
         void openAndLoadSceneDialog();
 
+        void DeserializeProfile();
         void DrawPreferencesWindow();
 
         void DrawAnimationWindow();
@@ -229,8 +231,6 @@ namespace gui {
         
     };
 
-    bool containsSubstring(const std::string& x, const std::string& y);
-
 
     class EditorComponentTypeRegistry {
     private:
@@ -250,6 +250,12 @@ namespace gui {
             }
         }
     };
+
+
+
+
+    bool containsSubstring(const std::string& x, const std::string& y);
+
 
     template<typename T>
     inline void ImGuiHandler::RegisterComponent()

@@ -5,7 +5,7 @@
 class AudioScript : public TemplateSC {
 public:
 
-    std::string GUID;
+    utility::GUID GUID;
 
     void Start() override {
 
@@ -16,7 +16,7 @@ public:
 
         //Play the audio that say playonstart if not go to the first audio
         for (auto& af : ac->audioFiles) {
-            if (af.playOnStart && !af.audioGUID.empty()) {
+            if (af.playOnStart && !af.audioGUID.Empty()) {
                 GUID = af.audioGUID;
                 af.requestPlay = true;
                 return; 

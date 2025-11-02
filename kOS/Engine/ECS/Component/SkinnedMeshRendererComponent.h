@@ -31,22 +31,22 @@ namespace ecs {
     class SkinnedMeshRendererComponent : public Component {
 
     public:
-        std::string skinnedMeshGUID{}; // Skinned mesh asset
-        std::string materialGUID{};    // Material asset
-        std::string skeletonGUID{};
+        utility::GUID skinnedMeshGUID{}; // Skinned mesh asset
+        utility::GUID materialGUID{};    // Material asset
+        utility::GUID skeletonGUID{};
 
         //Temporary
-        std::string diffuseMaterialGUID{};   // Path or ID for material asset
-        std::string specularMaterialGUID{};
-        std::string normalMaterialGUID{};
-        std::string ambientOcclusionMaterialGUID{};
-        std::string roughnessMaterialGUID{};
+        utility::GUID diffuseMaterialGUID{};   // Path or ID for material asset
+        utility::GUID specularMaterialGUID{};
+        utility::GUID normalMaterialGUID{};
+        utility::GUID ambientOcclusionMaterialGUID{};
+        utility::GUID roughnessMaterialGUID{};
 
         REFLECTABLE(SkinnedMeshRendererComponent, skinnedMeshGUID, materialGUID, skeletonGUID, diffuseMaterialGUID, specularMaterialGUID, normalMaterialGUID, ambientOcclusionMaterialGUID, roughnessMaterialGUID);
 
-        std::string cachedSkinnedMeshGUID{};
-        std::string cachedMaterialGUID{};
-        std::string cachedSkeletonGUID{};
+        utility::GUID cachedSkinnedMeshGUID{};
+        utility::GUID cachedMaterialGUID{};
+        utility::GUID cachedSkeletonGUID{};
         void* cachedSkinnedMeshResource{};
         void* cachedMaterialResource{};
         void* cachedSkeletonResource{};

@@ -3,12 +3,13 @@
 #include "Hierachy.h"
 #include "Scene/SceneManager.h"
 #include "Utility/MathUtility.h"
+#include "Config/ComponentRegistry.h"
 
 namespace hierachy {
 
 	void m_SetParent(EntityID parent, EntityID child, bool updateTransform) {
 
-		ECS* ecs = ECS::GetInstance();
+		ECS* ecs = ComponentRegistry::GetECSInstance();
 
 		m_RemoveParent(child);
 
@@ -38,11 +39,11 @@ namespace hierachy {
 		// Recalculate Local Transform after parenting
 		if (updateTransform) {
 			childTransform->localTransform = glm::inverse(parentTransform->transformation) * childTransform->transformation;
-			math::DecomposeMtxIntoTRS(childTransform->localTransform, childTransform->LocalTransformation.position, childTransform->LocalTransformation.rotation, childTransform->LocalTransformation.scale);
+			utility::DecomposeMtxIntoTRS(childTransform->localTransform, childTransform->LocalTransformation.position, childTransform->LocalTransformation.rotation, childTransform->LocalTransformation.scale);
 		}
 	}
 
-	void m_RemoveParent(EntityID child) {
+	void m_RemoveParent(EntityID child, bool updateTransform) {
 		// removes id from both the child and the parents vector
 		ECS* ecs = ECS::GetInstance();
 
@@ -65,9 +66,11 @@ namespace hierachy {
 		TransformComponent* childTransform = ecs->GetComponent<TransformComponent>(child);
 		childTransform->m_haveParent = false;
 		childTransform->m_parentID = 0;
-		// Updating Transformation Mtxs
-		childTransform->localTransform = childTransform->transformation;
-		math::DecomposeMtxIntoTRS(childTransform->localTransform, childTransform->LocalTransformation.position, childTransform->LocalTransformation.rotation, childTransform->LocalTransformation.scale);
+		//Updating Transformation Mtxs
+		if (updateTransform) {
+			childTransform->localTransform = childTransform->transformation;
+			utility::DecomposeMtxIntoTRS(childTransform->localTransform, childTransform->LocalTransformation.position, childTransform->LocalTransformation.rotation, childTransform->LocalTransformation.scale);
+		}
 	}
 
 	std::optional<EntityID> GetParent(EntityID child)

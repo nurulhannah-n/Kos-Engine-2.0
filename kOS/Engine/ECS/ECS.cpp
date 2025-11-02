@@ -8,6 +8,7 @@
 #include "Reflection/Field.h"
 #include "Scene/SceneManager.h"
 
+
 //ECS Varaible
 
 namespace ecs{
@@ -195,7 +196,6 @@ namespace ecs{
 
 	EntityID ECS::DuplicateEntity(EntityID DuplicatesID, std::string scene) {
 
-
 		if (scene.empty()) {
 			const auto& result = GetSceneByEntityID(DuplicatesID);
 			if (result.empty()) {
@@ -209,25 +209,20 @@ namespace ecs{
 			}
 		}
 
-
 		EntityID NewEntity = CreateEntity(scene);
-
 		ComponentSignature DuplicateSignature = m_entityMap.find(DuplicatesID)->second;
 
 		for (const auto& [ComponentName, key] : m_componentKey) {
 			if (DuplicateSignature.test(key)) {
 				auto& action = componentAction.at(ComponentName);
-
 				auto* comp = action->DuplicateComponent(DuplicatesID, NewEntity);
 			}
 		}
 
 		m_entityMap.find(NewEntity)->second = DuplicateSignature;
 		RegisterEntity(NewEntity);
-
 		//checks if duplicates entity has parent and assign it
 		if (hierachy::GetParent(DuplicatesID).has_value()) {
-			//TransformComponent* transform = GetComponent<TransformComponent>(hierachy::GetParent(DuplicatesID).value());
 			//transform->m_childID.push_back(NewEntity);
 			auto parent = hierachy::GetParent(DuplicatesID).value();
 			hierachy::m_SetParent(parent, NewEntity);
@@ -299,6 +294,9 @@ namespace ecs{
 			}
 		}
 
+		//delete guid off map
+		DeleteGUID(GetComponent<NameComponent>(ID)->entityGUID);
+
 		// reset all components
 		for (const auto& [ComponentName, key] : m_componentKey) {
 			if (m_entityMap.find(ID)->second.test(key)) {
@@ -306,8 +304,8 @@ namespace ecs{
 			}
 		}
 
-		//store delete entity
-		m_entityMap.erase(ID);
+		//delete stored entity
+		m_entityMap.erase(ID);		
 		m_availableEntityID.push(ID);
 
 		return true;
