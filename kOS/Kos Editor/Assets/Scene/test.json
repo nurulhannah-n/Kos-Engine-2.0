@@ -156,6 +156,14 @@
                                     "prefabName": "",
                                     "hide": false
                                 },
+                                "PlayerScript": {
+                                    "health": 0,
+                                    "shield": 0,
+                                    "healthbool": false,
+                                    "shield2": "",
+                                    "Targetguid": "1fc592cd-d793-e482-631b-c2d9e1693afa",
+                                    "prefabGUID": "1fc592cd-d793-e482-631b-c2d9e1693afa"
+                                },
                                 "TransformComponent": {
                                     "WorldTransformation": {
                                         "position": {
