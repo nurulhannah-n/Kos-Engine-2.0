@@ -99,7 +99,7 @@ void R_Animation::Load() {
     //Load from file 
     std::ifstream inputFile(this->m_filePath.string().c_str(), std::ios::binary);
     if (!inputFile) {
-        LOGGING_ASSERT("Failed to open mesh file");
+        LOGGING_ERROR("Failed to open mesh file");
     }
     std::string serialized((std::istreambuf_iterator<char>(inputFile)),
         std::istreambuf_iterator<char>());

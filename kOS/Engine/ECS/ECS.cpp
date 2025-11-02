@@ -197,13 +197,13 @@ namespace ecs{
 		if (scene.empty()) {
 			const auto& result = GetSceneByEntityID(DuplicatesID);
 			if (result.empty()) {
-				LOGGING_ASSERT_WITH_MSG("Scene does not exits");
+				LOGGING_ERROR("Scene does not exits");
 			}
 			scene = result;
 		}
 		else {
 			if (sceneMap.find(scene) == sceneMap.end()) {
-				LOGGING_ASSERT_WITH_MSG("Scene does not exits");
+				LOGGING_ERROR("Scene does not exits");
 			}
 		}
 
