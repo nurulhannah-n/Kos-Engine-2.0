@@ -80,7 +80,7 @@ public:
 
 		//check if resource is registered
 		if (m_resourceExtension.find(className) == m_resourceExtension.end()) {
-			LOGGING_ASSERT_WITH_MSG(className + " : Not registered");
+			LOGGING_ERROR(className + " : Not registered");
 		}
 
 		//Asset not loaded
