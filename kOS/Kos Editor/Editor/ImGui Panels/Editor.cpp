@@ -111,6 +111,8 @@ namespace gui {
 		RegisterComponent<ecs::PathfinderTargetComponent>();
 		RegisterComponent<ecs::CubeRendererComponent>();
 		RegisterComponent<ecs::ParticleComponent>();
+		RegisterComponent<ecs::AnimatorComponent>();
+
 		RegisterComponent<ecs::SphereRendererComponent>();
 		RegisterComponent<ecs::MaterialComponent>();
 		//Allocate to map

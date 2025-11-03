@@ -290,7 +290,7 @@ void GraphicsManager::gm_FillDepthCube(const CameraData& camera) {
 
 	for (int i{ 0 }; i < lightRenderer.pointLightsToDraw.size(); i++) {
 		if (!lightRenderer.pointLightsToDraw[i].shadowCon)continue;;
-		glViewport(0, 0, 1024.f, 1024.f);
+		glViewport(0, 0, static_cast<GLsizei>(1024.f), static_cast<GLsizei>(1024.f));
 		glBindFramebuffer(GL_FRAMEBUFFER, lightRenderer.dcm[i].GetFBO());
 		glClear(GL_DEPTH_BUFFER_BIT);
 		pointShadowShader->Use();
@@ -323,7 +323,7 @@ void GraphicsManager::gm_FillDepthCube(const CameraData& camera, int index) {
 	Shader* pointShadowShader{ &shaderManager.engineShaders.find("PointShadowShader")->second };
 	glCullFace(GL_FRONT);
 
-	glViewport(0, 0, 1024.f, 1024.f);
+	glViewport(0, 0, static_cast<GLsizei>(1024.f), static_cast<GLsizei>(1024.f));
 	glBindFramebuffer(GL_FRAMEBUFFER, lightRenderer.dcm[index].GetFBO());
 	glClear(GL_DEPTH_BUFFER_BIT);
 	pointShadowShader->Use();

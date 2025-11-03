@@ -106,7 +106,7 @@ namespace Application {
            INITIALIZE Start Scene
         --------------------------------------------------------------*/
         //for game only
-        resourceManager->GetResource<R_Scene>(windowData.startScene);
+        resourceManager->GetResource<R_Scene>(windowData.startScene)->LoadScene();
         LOGGING_INFO("Load Asset Successful");
 
         /*--------------------------------------------------------------

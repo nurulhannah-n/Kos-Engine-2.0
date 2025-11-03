@@ -57,7 +57,7 @@ namespace ecs{
 		RegisterSystem<CameraSystem, TransformComponent, CameraComponent>();
 		RegisterSystem<RenderSystem, TransformComponent, SpriteComponent>();
 		RegisterSystem<MeshRenderSystem, TransformComponent, MaterialComponent, MeshFilterComponent>();
-		RegisterSystem<SkinnedMeshRenderSystem, TransformComponent, SkinnedMeshRendererComponent>();
+		RegisterSystem<SkinnedMeshRenderSystem, TransformComponent, SkinnedMeshRendererComponent, AnimatorComponent>();
 		RegisterSystem<CubeRenderSystem, TransformComponent, MaterialComponent, CubeRendererComponent>();
 		RegisterSystem<SphereRenderSystem, TransformComponent, MaterialComponent, SphereRendererComponent>();
 
