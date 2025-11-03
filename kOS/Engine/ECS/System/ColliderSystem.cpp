@@ -30,6 +30,10 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 
 using namespace physics;
 
+namespace {
+    constexpr float MINSIZE = 0.01f;
+}
+
 namespace ecs {
 	void ColliderSystem::Init() {
         onDeregister.Add([](EntityID id) {
@@ -109,7 +113,10 @@ namespace ecs {
             PxFilterData filter;
             filter.word0 = name->Layer;
 
-            glm::vec3 scale = trans->LocalTransformation.scale;
+            glm::vec3& scale = trans->LocalTransformation.scale;
+            scale.x = glm::max(scale.x, MINSIZE);
+            scale.y = glm::max(scale.y, MINSIZE);
+            scale.z = glm::max(scale.z, MINSIZE);
 
             if (box) {
                 glm::vec3 halfExtents = box->box.size * scale * 0.5f;
@@ -125,7 +132,7 @@ namespace ecs {
                 ToPhysxIsTrigger(shape, box->isTrigger);
                 shape->setSimulationFilterData(filter);
                 shape->setQueryFilterData(filter);
-                box->box.bounds.center = trans->LocalTransformation.position + box->box.center * scale;
+                box->box.bounds.center = trans->WorldTransformation.position + box->box.center * scale;
                 box->box.bounds.extents = halfExtents;
                 box->box.bounds.size = box->box.size * scale;
                 box->box.bounds.min = box->box.bounds.center - box->box.bounds.extents;
@@ -182,8 +189,8 @@ namespace ecs {
                 else if (sphere && sphere->actor) { actor = static_cast<PxRigidStatic*>(sphere->actor); }
                 else if (capsule && capsule->actor) { actor = static_cast<PxRigidStatic*>(capsule->actor); }
 
-                glm::vec3 pos = trans->LocalTransformation.position;
-                glm::quat rot{ glm::radians(trans->LocalTransformation.rotation) };
+                glm::vec3 pos = trans->WorldTransformation.position;
+                glm::quat rot{ glm::radians(trans->WorldTransformation.rotation) };
                 PxTransform pxTrans{ PxVec3{ pos.x, pos.y, pos.z }, PxQuat{ rot.x, rot.y, rot.z, rot.w } };
 
                 if (!actor) {
