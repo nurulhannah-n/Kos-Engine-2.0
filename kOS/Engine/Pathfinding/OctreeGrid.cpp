@@ -85,10 +85,10 @@ namespace Octrees {
 
 		glm::vec3 boundCenter(0.f, 0.f, 0.f);
 
-		for (const auto& id : m_ecs.GetEntitySignatureData()) {
-			ecs::BoxColliderComponent* boxCollider = m_ecs.GetComponent<ecs::BoxColliderComponent>(id.first);
-			ecs::TransformComponent* transform = m_ecs.GetComponent<ecs::TransformComponent>(id.first);
-			ecs::NameComponent* name = m_ecs.GetComponent<ecs::NameComponent>(id.first);
+		for (const auto& id : m_ecs->GetEntitySignatureData()) {
+			ecs::BoxColliderComponent* boxCollider = m_ecs->GetComponent<ecs::BoxColliderComponent>(id.first);
+			ecs::TransformComponent* transform = m_ecs->GetComponent<ecs::TransformComponent>(id.first);
+			ecs::NameComponent* name = m_ecs->GetComponent<ecs::NameComponent>(id.first);
 
 			if (!boxCollider || !transform || !name || name->entityTag != "Obstacle")
 				continue;
