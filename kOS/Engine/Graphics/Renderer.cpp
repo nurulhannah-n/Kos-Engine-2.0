@@ -188,7 +188,7 @@ void SkinnedMeshRenderer::Render(const CameraData& camera, Shader& shader)
 		shader.SetInt("entityID", mesh.entityID+1);
 		if (mesh.animationToUse)
 		{
-			mesh.animationToUse->Update(mesh.animationToUse->GetCurrentTime(), glm::mat4(1.f), glm::mat4(1.f), mesh.meshToUse->GetBoneMap(), mesh.meshToUse->GetBoneInfo());
+			mesh.animationToUse->Update(mesh.currentDuration, glm::mat4(1.f), glm::mat4(1.f), mesh.meshToUse->GetBoneMap(), mesh.meshToUse->GetBoneInfo());
 			mesh.meshToUse->DrawAnimation(shader, mesh.meshMaterial, mesh.animationToUse->GetBoneFinalMatrices());
 		}
 		else
