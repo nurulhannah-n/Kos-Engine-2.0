@@ -3,4 +3,7 @@
 #include "PlayerScript.h"
 #include "EnemyScript.h"
 #include "AudioScript.h"
-#include "GunScript.h"
+
+#include "BulletLogic.h"
+#include "EnemyManagerScript.h"
+#include "PlayerManagerScript.h"

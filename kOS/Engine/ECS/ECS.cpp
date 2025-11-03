@@ -40,6 +40,8 @@ namespace ecs{
 		RegisterComponent<CharacterControllerComponent>();
 		//RegisterComponent<ScriptComponent>();
 		RegisterComponent<OctreeGeneratorComponent>();
+		RegisterComponent<PathfinderComponent>();
+		RegisterComponent<PathfinderTargetComponent>();
 		RegisterComponent<CubeRendererComponent>();
 		RegisterComponent<ParticleComponent>();
 
@@ -47,7 +49,7 @@ namespace ecs{
 		RegisterSystem<ScriptingSystem>(RUNNING);
 		RegisterSystem<TransformSystem, TransformComponent>();
 		RegisterSystem<CharacterControllerSystem, TransformComponent, CharacterControllerComponent>(RUNNING);
-		RegisterSystem<ColliderSystem, TransformComponent>(RUNNING);
+		RegisterSystem<ColliderSystem, TransformComponent>();
 		RegisterSystem<RigidbodySystem, TransformComponent, RigidbodyComponent>(RUNNING);
 		RegisterSystem<PhysicsSystem, TransformComponent, RigidbodyComponent>(RUNNING);
 		RegisterSystem<CameraSystem, TransformComponent, CameraComponent>();
@@ -63,7 +65,7 @@ namespace ecs{
 		RegisterSystem<DebugCapsuleColliderRenderSystem, TransformComponent, CapsuleColliderComponent>();
 		RegisterSystem<DebugSphereColliderRenderSystem, TransformComponent, SphereColliderComponent>();
 		RegisterSystem<AudioSystem, TransformComponent, AudioComponent>();
-		RegisterSystem<PathfindingSystem, TransformComponent, OctreeGeneratorComponent>();
+		RegisterSystem<PathfindingSystem, TransformComponent>();
 		RegisterSystem<ParticleSystem, TransformComponent, ParticleComponent>();
 
 
