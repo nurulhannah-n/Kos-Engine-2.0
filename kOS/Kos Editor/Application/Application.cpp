@@ -80,6 +80,11 @@ namespace Application {
         resourceManager.Init(configpath::resourceFilePath);
 
         /*--------------------------------------------------------------
+        INITIALIZE Audio Manager
+        --------------------------------------------------------------*/
+
+        audioManager.Init();
+        /*--------------------------------------------------------------
         INITIALIZE SCIRPT
         --------------------------------------------------------------*/
         scriptManager.Init(exePath.string());
