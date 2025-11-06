@@ -26,7 +26,6 @@ namespace ecs{
 		RegisterComponent<CanvasRendererComponent>();
 		RegisterComponent<MeshRendererComponent>();
 		RegisterComponent<MaterialComponent>();
-		RegisterComponent<MaterialListComponent>();
 		RegisterComponent<SkinnedMeshRendererComponent>();
 		RegisterComponent<AnimatorComponent>();
 		RegisterComponent<LightComponent>();

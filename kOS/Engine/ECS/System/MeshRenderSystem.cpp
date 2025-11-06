@@ -48,13 +48,13 @@ namespace ecs {
             TransformComponent* transform = m_ecs.GetComponent<TransformComponent>(id);
             MeshFilterComponent* meshFilter = m_ecs.GetComponent<MeshFilterComponent>(id);
 
-            if (m_ecs.HasComponent<MaterialListComponent>(id)) {
-                MaterialListComponent* matRenderer = m_ecs.GetComponent<MaterialListComponent>(id);
+            if (m_ecs.HasComponent<MaterialComponent>(id)) {
+                MaterialComponent* matRenderer = m_ecs.GetComponent<MaterialComponent>(id);
                 //Initialize each material
                 std::shared_ptr<R_Model> mesh = m_resourceManager.GetResource<R_Model>(meshFilter->meshGUID);
                 std::vector<PBRMaterial>pbrTmpList;
-                if (!matRenderer->materialGUIDList.size())continue;;
-                for (utility::GUID guid : matRenderer->materialGUIDList) {
+                if (!matRenderer->materialGUID.size())continue;;
+                for (utility::GUID guid : matRenderer->materialGUID) {
                     std::shared_ptr<R_Material> mat = m_resourceManager.GetResource<R_Material>(guid);
                     if (!mat)return;;
                     //Initialize all materials in the list
@@ -67,21 +67,6 @@ namespace ecs {
                 }
                 if (mesh)
                     m_graphicsManager.gm_PushMeshData(MeshData{ mesh,std::make_shared<PBRMaterialList>(pbrTmpList,true), transform->transformation,id });
-
-            }
-            else if (m_ecs.HasComponent<MaterialComponent>(id)) {
-                MaterialComponent* matRenderer = m_ecs.GetComponent<MaterialComponent>(id);
-                std::shared_ptr<R_Material> mat = m_resourceManager.GetResource<R_Material>(matRenderer->materialGUID);
-                if (!mat)return;;
-                std::shared_ptr<R_Model> mesh = m_resourceManager.GetResource<R_Model>(meshFilter->meshGUID);
-                std::shared_ptr<R_Texture> diff = m_resourceManager.GetResource<R_Texture>(mat->md.diffuseMaterialGUID);
-                std::shared_ptr<R_Texture> spec = m_resourceManager.GetResource<R_Texture>(mat->md.specularMaterialGUID);
-                std::shared_ptr<R_Texture> norm = m_resourceManager.GetResource<R_Texture>(mat->md.normalMaterialGUID);
-                std::shared_ptr<R_Texture> ao = m_resourceManager.GetResource<R_Texture>(mat->md.ambientOcclusionMaterialGUID);
-                std::shared_ptr<R_Texture> rough = m_resourceManager.GetResource<R_Texture>(mat->md.roughnessMaterialGUID);
-
-                if (mesh)
-                    m_graphicsManager.gm_PushMeshData(MeshData{ mesh,std::make_shared<PBRMaterial>(PBRMaterial{diff,spec,rough,ao,norm}), transform->transformation,id });
 
             }
             // Skip entities not in this scene or hidden

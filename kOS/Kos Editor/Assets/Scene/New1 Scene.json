@@ -147,7 +147,11 @@
             ]
         },
         "MaterialComponent": {
-            "materialGUID": "61cfd855-ca21-6e2a-3bf8-8fc94756f547"
+            "materialGUID": [
+                {
+                    "materialGUID": "61cfd855-ca21-6e2a-3bf8-8fc94756f547"
+                }
+            ]
         },
         "MeshFilterComponent": {
             "meshGUID": "ee1ad3b9-e869-074a-fe25-b15ac13d76d0"
@@ -228,7 +232,9 @@
                 "y": -0.4000000059604645,
                 "z": -1.600000023841858
             },
-            "active": false
+            "active": false,
+            "culling": false,
+            "layer": 0
         },
         "NameComponent": {
             "entityName": "camera",
@@ -523,7 +529,7 @@
     {
         "entityGUID": "49e12cda-8e58-a39e-de9f-f08e9dfad6f9",
         "MaterialComponent": {
-            "materialGUID": "61cfd855-ca21-6e2a-3bf8-8fc94756f547"
+            "materialGUID": []
         },
         "MeshFilterComponent": {
             "meshGUID": "00000000-0000-0000-0000-000000000000"
@@ -576,7 +582,7 @@
     {
         "entityGUID": "bbd4ddb4-aefa-85dd-10e3-8eb84494266b",
         "MaterialComponent": {
-            "materialGUID": "61cfd855-ca21-6e2a-3bf8-8fc94756f547"
+            "materialGUID": []
         },
         "NameComponent": {
             "entityName": "TestSphere",
@@ -625,22 +631,6 @@
     },
     {
         "entityGUID": "173044ff-5e71-293e-d119-d103c74e5a85",
-        "MaterialListComponent": {
-            "materialGUIDList": [
-                {
-                    "materialGUIDList": "b553fc55-22a6-6cc1-1d6d-194f4a56b6f9"
-                },
-                {
-                    "materialGUIDList": "d1e7abc1-bdfc-b0ef-3fa5-d1fb458abfdf"
-                },
-                {
-                    "materialGUIDList": "ee61e96c-ec6c-7cfa-a621-c021ddda10ec"
-                },
-                {
-                    "materialGUIDList": "d1e7abc1-bdfc-b0ef-3fa5-d1fb458abfdf"
-                }
-            ]
-        },
         "MeshFilterComponent": {
             "meshGUID": "1b24abdb-864c-b924-5d58-c999e401d55b"
         },
