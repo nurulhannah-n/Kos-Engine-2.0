@@ -71,7 +71,7 @@ namespace gui {
         ImGuiHandler(Application::AppWindow& window, AssetManager& am, GraphicsManager& gm, 
             ecs::ECS& ecs, scenes::SceneManager& sm,  serialization::Serialization& slm, 
             Fields& field, Input::InputSystem& input, physics::PhysicsManager& pm, 
-            layer::LayerStack& ls, ResourceManager& rm, ScriptManager& scriptm, Peformance& peformance, audio::AudioManager audioM):
+            layer::LayerStack& ls, ResourceManager& rm, ScriptManager& scriptm, Peformance& peformance, audio::AudioManager& audioM):
             m_window(window), 
             m_assetManager(am),
             m_graphicsManager(gm),

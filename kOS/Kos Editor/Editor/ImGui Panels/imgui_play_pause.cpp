@@ -27,7 +27,6 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 
 namespace gui {
 
-
     void DrawLoading() {
 
     }
@@ -40,9 +39,7 @@ namespace gui {
 	
     void ImGuiHandler::DrawPlayPauseBar() {
 
-        
         if (ImGui::BeginMenuBar()) {
-
 
             if (m_ecs.GetState() == ecs::STOP || m_ecs.GetState() == ecs::WAIT) {
 
@@ -51,27 +48,21 @@ namespace gui {
                         m_sceneManager.CacheCurrentScene();
                     }
                     m_ecs.SetState(ecs::START);
-                    //ecs::AudioSystem::SetPaused(false);
                     m_audioManager.SetPaused(false);
 				}
-
             }
 
             if (m_ecs.GetState() == ecs::RUNNING){
                 if (ImGui::Button("Pause")) {
                     m_ecs.SetState(ecs::WAIT);
-                    //ecs::AudioSystem::SetPaused(true);
                     m_audioManager.SetPaused(true);
-
                 }
-
             }
 
             if (m_ecs.GetState() == ecs::WAIT || m_ecs.GetState() == ecs::RUNNING) {
                 if (ImGui::Button("Stop")) {
                     m_ecs.SetState(ecs::STOP);
-                    //ecs::AudioSystem::StopAll();
-                   // ecs::AudioSystem::SetPaused(false);
+
                     m_audioManager.StopAll();
                     m_audioManager.SetPaused(false);
 

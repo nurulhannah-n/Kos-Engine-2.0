@@ -53,7 +53,7 @@ namespace Application {
 			, resourceManager()
 			, physicsManager()
 			, graphicsManager()
-			, ecs(peformance, graphicsManager, resourceManager, input, physicsManager, scriptManager)
+			, ecs(peformance, graphicsManager, resourceManager, input, physicsManager, scriptManager,audioManager)
 			, lvWindow(ecs, input)
 			, layersManager(ecs)
 			, serialization(ecs)

@@ -35,8 +35,6 @@ public:
     FMOD::System* GetSystem() const { return m_system; }
 
     void SetSystem(FMOD::System* sys) { m_system = sys; }
-    //static void SetGlobalSystem(FMOD::System* sys) { s_globalSystem = sys; }
-
 
     REFLECTABLE(R_Audio);
 
@@ -44,5 +42,4 @@ private:
     FMOD::System* m_system = nullptr;        
     FMOD::Sound* m_sound = nullptr;       
     unsigned int  m_createFlags = 0;
-   // static FMOD::System* s_globalSystem;     
 };

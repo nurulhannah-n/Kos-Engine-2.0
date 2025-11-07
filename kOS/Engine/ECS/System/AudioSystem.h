@@ -30,6 +30,7 @@ namespace ecs {
     class AudioSystem : public ISystem {
     public:
         using ISystem::ISystem;
+
         void Init() override;
         void Update() override;
  

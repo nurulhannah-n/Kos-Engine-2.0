@@ -1,10 +1,7 @@
 #include "AudioManager.h"
 
 namespace audio {
-    FMOD::System* AudioManager::s_fmod = nullptr;
-    bool AudioManager::s_paused = false;
-
-    AudioManager::AudioManager(){}
+    AudioManager::AudioManager() { s_fmod = nullptr; s_paused = false; }
 
     AudioManager::~AudioManager(){
         if (s_fmod) {
@@ -29,9 +26,6 @@ namespace audio {
 
         s_fmod = core;
         s_paused = false;
-
-        //R_Audio::SetGlobalSystem(s_fmod); 
-
     }
 
     void AudioManager::SetPaused(bool paused) {
@@ -53,5 +47,4 @@ namespace audio {
             master->stop();
         }
     }
-
 } 

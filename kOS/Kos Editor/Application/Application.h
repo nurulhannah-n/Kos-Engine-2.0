@@ -54,15 +54,16 @@ namespace Application {
 			, resourceManager()
 			, physicsManager()
 			, graphicsManager() 
-			, ecs(peformance, graphicsManager, resourceManager, input, physicsManager, scriptManager)
+			, ecs(peformance, graphicsManager, resourceManager, input, physicsManager, scriptManager,audioManager)
 			, lvWindow(ecs, input)
 			, layersManager(ecs)
 			, serialization(ecs)
 			, sceneManager(ecs, serialization, resourceManager)
 			, scriptManager(ecs, sceneManager, input, physicsManager,resourceManager, reflectionField)
+			, audioManager()
 			, assetManager()
 			, Editor(lvWindow, assetManager, graphicsManager, ecs, sceneManager, serialization, reflectionField, input, physicsManager, layersManager, resourceManager, scriptManager, peformance, audioManager)
-			, audioManager()
+		
 		{
 		}
 		~Application() = default;

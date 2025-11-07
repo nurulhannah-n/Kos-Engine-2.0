@@ -76,6 +76,7 @@ namespace Application {
         INITIALIZE SCIRPT
         --------------------------------------------------------------*/
         scriptManager.Init(exePath.string());
+        audioManager.Init();
 
         /*--------------------------------------------------------------
            INITIALIZE Start Scene

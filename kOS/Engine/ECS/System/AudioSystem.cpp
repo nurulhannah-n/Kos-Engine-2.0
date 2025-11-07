@@ -5,8 +5,8 @@
 \par       junjie.c@digipen.edu
 \date      Oct 03, 2025
 \brief     This file implements the definition of the AudioSystem
-           class. It handles the logic behind the Audio played in
-           the engine and works with the Audio Manager interface.
+		   class. It handles the logic behind the Audio played in
+		   the engine and works with the Audio Manager interface.
 
 
 Copyright (C) 2024 DigiPen Institute of Technology.
@@ -21,116 +21,126 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 
 namespace ecs {
 
-    //FMOD::System* AudioSystem::s_fmod = nullptr;
-    //bool AudioSystem::s_paused = false;
+	void AudioSystem::Init() {
+	}
 
-    void AudioSystem::Init() {
-    }
+	inline FMOD_VECTOR ToF(const glm::vec3& v) { return FMOD_VECTOR{ v.x, v.y, v.z }; }
 
-    static inline FMOD_VECTOR ToF(const glm::vec3& v) { return FMOD_VECTOR{ v.x, v.y, v.z }; }
+	void AudioSystem::Update() {
 
-    void AudioSystem::Update() {
-        if (auto* core = audio::AudioManager::GetCore()) {
-            FMOD_VECTOR p = ToF(m_listenerPos);
-            FMOD_VECTOR v{ 0,0,0 }; 
-            FMOD_VECTOR f = ToF(m_listenerFwd);
-            FMOD_VECTOR u = ToF(m_listenerUp);
-            core->set3DListenerAttributes(0, &p, &v, &f, &u);
-        }
+		if (auto* core = m_audioManager.GetCore()) {
+			FMOD_VECTOR p = ToF(m_listenerPos);
+			FMOD_VECTOR v{ 0,0,0 };
+			FMOD_VECTOR f = ToF(m_listenerFwd);
+			FMOD_VECTOR u = ToF(m_listenerUp);
+			core->set3DListenerAttributes(0, &p, &v, &f, &u);
+		}
 
-        const auto& entities = m_entities.Data();
-        for (const EntityID id : entities) {
-            auto* transform = m_ecs.GetComponent<TransformComponent>(id);
-            auto* nameComp = m_ecs.GetComponent<NameComponent>(id);
-            auto* audioComp = m_ecs.GetComponent<AudioComponent>(id);
-          
-            if (!nameComp || !audioComp) continue;
+		const auto& entities = m_entities.Data();
+		for (const EntityID id : entities) {
+			auto* transform = m_ecs.GetComponent<TransformComponent>(id);
+			auto* nameComp = m_ecs.GetComponent<NameComponent>(id);
+			auto* audioComp = m_ecs.GetComponent<AudioComponent>(id);
 
-            if (nameComp->hide) continue;
+			if (!nameComp || !audioComp) continue;
 
-            //Loop through all audio files
-            for (auto& af : audioComp->audioFiles) {
-                
-                if (af.use3D && transform && af.channel) {
-                    glm::vec3 pos = transform->WorldTransformation.position;
-                    FMOD_VECTOR fpos{ pos.x, pos.y, pos.z };
-                    FMOD_VECTOR fvel{ 0,0,0 }; 
-                    af.channel->set3DAttributes(&fpos, &fvel);
-                }
+			if (nameComp->hide) continue;
 
-                if (!af.requestPlay) continue;
-                if (af.audioGUID.Empty()) continue;
+			//Loop through all audio files
+			for (auto& af : audioComp->audioFiles) {
 
-                //Get GUID
-                auto res = m_resourceManager.GetResource<R_Audio>(af.audioGUID);
-                if (!res) continue;
+				if (af.use3D && transform && af.channel) {
+					glm::vec3 pos = transform->WorldTransformation.position;
+					FMOD_VECTOR fpos{ pos.x, pos.y, pos.z };
+					FMOD_VECTOR fvel{ 0,0,0 };
+					af.channel->set3DAttributes(&fpos, &fvel);
+				}
 
-                //LOad sound
-                if (!res->GetSound()) {
-                    res->SetSystem(audio::AudioManager::GetCore());
+				if (!af.requestPlay) continue;
+				if (af.audioGUID.Empty()) continue;
 
-                    res->Load(); 
-                }     
+				//Get GUID
+				auto res = m_resourceManager.GetResource<R_Audio>(af.audioGUID);
+				if (!res) continue;
 
-                FMOD::Sound* sound = res->GetSound();
-                FMOD::System* system = res->GetSystem();
+				//LOad sound
+				if (!res->GetSound()) {
+					res->SetSystem(m_audioManager.GetCore());
 
-                if (!sound || !system) continue;
+					res->Load();
+				}
 
-                //Player sound
-                if (af.use3D) {
-                    sound->setMode(FMOD_3D | FMOD_3D_LINEARROLLOFF);
+				FMOD::Sound* sound = res->GetSound();
+				FMOD::System* system = res->GetSystem();
 
-                    const float minD = std::max(0.01f, af.minDistance);
-                    const float maxD = std::max(minD + 0.01f, af.maxDistance);
-                    sound->set3DMinMaxDistance(minD, maxD);
-                }
-                else {
-                    sound->setMode(FMOD_2D | FMOD_LOOP_OFF);
-                }
+				if (!sound || !system) continue;
 
-                FMOD::Channel* ch = nullptr;
-                if (system->playSound(sound, nullptr, true , &ch) == FMOD_OK && ch) {
+				//Player sound
+				if (af.use3D) {
+					sound->setMode(FMOD_3D | FMOD_3D_LINEARROLLOFF);
 
-                    ch->setVolume(std::clamp(af.volume, 0.0f, 1.0f));
+					const float minD = std::max(0.01f, af.minDistance);
+					const float maxD = std::max(minD + 0.01f, af.maxDistance);
+					sound->set3DMinMaxDistance(minD, maxD);
+				}
+				else {
+					sound->setMode(FMOD_2D | FMOD_LOOP_OFF);
+				}
 
-                    if (af.use3D) {
-                        const glm::vec3 pos = transform ? transform->WorldTransformation.position : glm::vec3(0);
-                        const FMOD_VECTOR fpos{ pos.x, pos.y, pos.z };
-                        const FMOD_VECTOR fvel{ 0,0,0 };
-                        ch->set3DAttributes(&fpos, &fvel);
-                        ch->set3DLevel(1.0f);
+				FMOD::Channel* ch = nullptr;
+				if (system->playSound(sound, nullptr, true, &ch) == FMOD_OK && ch) {
 
-                        if (af.loop) { ch->setMode(FMOD_LOOP_NORMAL); ch->setLoopCount(-1); }
-                        else { ch->setMode(FMOD_LOOP_OFF);    ch->setLoopCount(0); }
-                    }
-                    else {
-                        ch->setPan(std::clamp(af.pan, -1.0f, 1.0f));
-                        if (af.loop) { ch->setMode(FMOD_LOOP_NORMAL); ch->setLoopCount(-1); }
-                        else { ch->setMode(FMOD_LOOP_OFF);    ch->setLoopCount(0); }
-                    }
+					ch->setVolume(std::clamp(af.volume, 0.0f, 1.0f));
 
-                    ch->setPaused(false);
-                    af.channel = ch;
-                }
+					if (af.use3D) {
+						const glm::vec3 pos = transform ? transform->WorldTransformation.position : glm::vec3(0);
+						const FMOD_VECTOR fpos{ pos.x, pos.y, pos.z };
+						const FMOD_VECTOR fvel{ 0,0,0 };
+						ch->set3DAttributes(&fpos, &fvel);
+						ch->set3DLevel(1.0f);
 
-                //Ensure only play once per frame
-                af.requestPlay = false;
-            }
-        }
+						if (af.loop) {
+							ch->setMode(FMOD_LOOP_NORMAL);
+							ch->setLoopCount(-1);
+						}
+						else {
+							ch->setMode(FMOD_LOOP_OFF);
+							ch->setLoopCount(0);
+						}
+					}
+					else {
+						ch->setPan(std::clamp(af.pan, -1.0f, 1.0f));
+						if (af.loop) {
+							ch->setMode(FMOD_LOOP_NORMAL);
+							ch->setLoopCount(-1);
+						}
+						else {
+							ch->setMode(FMOD_LOOP_OFF);
+							ch->setLoopCount(0);
+						}
+					}
 
-        //Update sound every frame
-        if (auto* core = audio::AudioManager::GetCore()) {
-            core->update();
-        }
-    }
+					ch->setPaused(false);
+					af.channel = ch;
+				}
 
-    void AudioSystem::SetListener(const glm::vec3& pos,
-        const glm::vec3& fwd,
-        const glm::vec3& up) {
-        m_listenerPos = pos;
-        m_listenerFwd = fwd;
-        m_listenerUp = up;
-    }
+				//Ensure only play once per frame
+				af.requestPlay = false;
+			}
+		}
+
+		//Update sound every frame
+		if (auto* core = m_audioManager.GetCore()) {
+			core->update();
+		}
+	}
+
+	void AudioSystem::SetListener(const glm::vec3& pos,
+		const glm::vec3& fwd,
+		const glm::vec3& up) {
+		m_listenerPos = pos;
+		m_listenerFwd = fwd;
+		m_listenerUp = up;
+	}
 
 }
