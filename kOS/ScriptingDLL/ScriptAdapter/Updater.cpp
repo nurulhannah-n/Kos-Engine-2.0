@@ -52,5 +52,7 @@ extern "C"  __declspec(dllexport) void UpdateStatic(StaticVariableManager* svm) 
 	RegisterScript<BulletLogic>(TemplateSC::ecsPtr);
 	RegisterScript<EnemyManagerScript>(TemplateSC::ecsPtr);
 
+	RegisterScript<PauseMenuScript>(TemplateSC::ecsPtr);
+	RegisterScript<HealthBarScript>(TemplateSC::ecsPtr);
 	FieldComponentTypeRegistry::CreateAllDrawers(static_cast<Fields*>(svm->field)->GetAction());
 }
