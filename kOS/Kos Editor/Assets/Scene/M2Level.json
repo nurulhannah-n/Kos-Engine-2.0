@@ -190,7 +190,18 @@
             "isKinematic": false,
             "interpolation": 0,
             "collisionDetection": 0,
-            "constraints": 0
+            "constraints": 0,
+            "speed": 0.0,
+            "velocity": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "angularVelocity": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
         },
         "TransformComponent": {
             "WorldTransformation": {
@@ -356,7 +367,7 @@
                         "NameComponent": {
                             "entityName": "Player Arm",
                             "Layer": 0,
-                            "entityTag": "Default",
+                            "entityTag": "Wall",
                             "isPrefab": false,
                             "prefabName": "",
                             "hide": false
@@ -466,7 +477,18 @@
                     "isKinematic": true,
                     "interpolation": 0,
                     "collisionDetection": 0,
-                    "constraints": 0
+                    "constraints": 0,
+                    "speed": 0.0,
+                    "velocity": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "angularVelocity": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    }
                 },
                 "SphereColliderComponent": {
                     "isTrigger": true,
@@ -521,7 +543,7 @@
     {
         "entityGUID": "52dac04b-17f9-d959-a3b8-8621e6f163f1",
         "CapsuleColliderComponent": {
-            "isTrigger": true,
+            "isTrigger": false,
             "capsule": {
                 "center": {
                     "x": 0.0,
@@ -533,9 +555,12 @@
                 "capsuleDirection": 1
             }
         },
-        "EnemyManagerScript": {
-            "enemyHealth": 10,
-            "enemyMovementSpeed": 1.0
+        "FakeEnemyScript": {
+            "enemySpeed": 0.30000001192092896,
+            "enemyDamage": 1,
+            "damageInterval": 0.0,
+            "playerObject": "e8f895d3-5d21-1cc1-766a-6d678cd35f8d",
+            "playerObjectID": 0
         },
         "NameComponent": {
             "entityName": "Enemy",
@@ -549,12 +574,33 @@
             "pathfinderMovementSpeed": 2.5,
             "chase": true
         },
+        "RigidbodyComponent": {
+            "mass": 1.0,
+            "drag": 0.0,
+            "angularDrag": 0.05000000074505806,
+            "useGravity": true,
+            "isKinematic": false,
+            "interpolation": 0,
+            "collisionDetection": 0,
+            "constraints": 0,
+            "speed": 0.0,
+            "velocity": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "angularVelocity": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
         "TransformComponent": {
             "WorldTransformation": {
                 "position": {
-                    "x": -85.18982696533203,
-                    "y": -2.007373332977295,
-                    "z": -54.53916931152344
+                    "x": -12.189826965332031,
+                    "y": -3.007373332977295,
+                    "z": -40.53916931152344
                 },
                 "rotation": {
                     "x": 0.0,
@@ -569,9 +615,9 @@
             },
             "LocalTransformation": {
                 "position": {
-                    "x": -85.18982696533203,
-                    "y": -2.007373332977295,
-                    "z": -54.53916931152344
+                    "x": -12.189826965332031,
+                    "y": -3.007373332977295,
+                    "z": -40.53916931152344
                 },
                 "rotation": {
                     "x": 0.0,
@@ -609,9 +655,9 @@
                 "TransformComponent": {
                     "WorldTransformation": {
                         "position": {
-                            "x": -85.18982696533203,
-                            "y": -3.764449119567871,
-                            "z": -54.53916931152344
+                            "x": -12.189826965332031,
+                            "y": -4.764449119567871,
+                            "z": -40.53916931152344
                         },
                         "rotation": {
                             "x": -0.0013324969913810492,
@@ -1068,7 +1114,11 @@
         },
         "CubeRendererComponent": {},
         "MaterialComponent": {
-            "materialGUID": []
+            "materialGUID": [
+                {
+                    "materialGUID": "f631c0a1-bfb7-07c9-773f-958222697654"
+                }
+            ]
         },
         "NameComponent": {
             "entityName": "Obstacle",
@@ -1890,7 +1940,11 @@
             {
                 "entityGUID": "da81fd9b-7c88-f61f-0692-33c6b5dc9cba",
                 "MaterialComponent": {
-                    "materialGUID": []
+                    "materialGUID": [
+                        {
+                            "materialGUID": "e9ece6d7-4ed7-73b3-9309-ec58d5d77a07"
+                        }
+                    ]
                 },
                 "MeshFilterComponent": {
                     "meshGUID": "448ff5ff-3732-73c6-9a7d-622633b24227"
@@ -1943,7 +1997,11 @@
             {
                 "entityGUID": "023bc14c-be97-b1b5-34ad-2b409ae051f8",
                 "MaterialComponent": {
-                    "materialGUID": []
+                    "materialGUID": [
+                        {
+                            "materialGUID": "e9ece6d7-4ed7-73b3-9309-ec58d5d77a07"
+                        }
+                    ]
                 },
                 "MeshFilterComponent": {
                     "meshGUID": "448ff5ff-3732-73c6-9a7d-622633b24227"
@@ -1996,7 +2054,11 @@
             {
                 "entityGUID": "e3fd5409-073d-8e80-6ebd-9234c48127bf",
                 "MaterialComponent": {
-                    "materialGUID": []
+                    "materialGUID": [
+                        {
+                            "materialGUID": "e9ece6d7-4ed7-73b3-9309-ec58d5d77a07"
+                        }
+                    ]
                 },
                 "MeshFilterComponent": {
                     "meshGUID": "448ff5ff-3732-73c6-9a7d-622633b24227"
@@ -2049,7 +2111,11 @@
             {
                 "entityGUID": "629b61fc-e939-21f4-f440-4cb23330c172",
                 "MaterialComponent": {
-                    "materialGUID": []
+                    "materialGUID": [
+                        {
+                            "materialGUID": "e9ece6d7-4ed7-73b3-9309-ec58d5d77a07"
+                        }
+                    ]
                 },
                 "MeshFilterComponent": {
                     "meshGUID": "448ff5ff-3732-73c6-9a7d-622633b24227"
@@ -2102,7 +2168,11 @@
             {
                 "entityGUID": "f2a60a8e-252b-1cf0-ebfa-bbf0a323680b",
                 "MaterialComponent": {
-                    "materialGUID": []
+                    "materialGUID": [
+                        {
+                            "materialGUID": "e9ece6d7-4ed7-73b3-9309-ec58d5d77a07"
+                        }
+                    ]
                 },
                 "MeshFilterComponent": {
                     "meshGUID": "448ff5ff-3732-73c6-9a7d-622633b24227"
@@ -2155,7 +2225,11 @@
             {
                 "entityGUID": "05a57d2d-54e8-6528-68f8-042a1f112278",
                 "MaterialComponent": {
-                    "materialGUID": []
+                    "materialGUID": [
+                        {
+                            "materialGUID": "e9ece6d7-4ed7-73b3-9309-ec58d5d77a07"
+                        }
+                    ]
                 },
                 "MeshFilterComponent": {
                     "meshGUID": "448ff5ff-3732-73c6-9a7d-622633b24227"
@@ -2208,7 +2282,11 @@
             {
                 "entityGUID": "7fd5003e-a264-7636-e9e7-1f5068420a6d",
                 "MaterialComponent": {
-                    "materialGUID": []
+                    "materialGUID": [
+                        {
+                            "materialGUID": "e9ece6d7-4ed7-73b3-9309-ec58d5d77a07"
+                        }
+                    ]
                 },
                 "MeshFilterComponent": {
                     "meshGUID": "046eb175-fa5b-f1b2-646e-184083d5ccfb"
@@ -5085,7 +5163,7 @@
         },
         "children": [
             {
-                "entityGUID": "eb4feece-1e8e-db0e-af7b-4d6daf8649c3",
+                "entityGUID": "eb2718d9-f658-372a-41c5-e477cd01738a",
                 "CapsuleColliderComponent": {
                     "isTrigger": false,
                     "capsule": {
@@ -5100,7 +5178,11 @@
                     }
                 },
                 "MaterialComponent": {
-                    "materialGUID": []
+                    "materialGUID": [
+                        {
+                            "materialGUID": "2e16031c-9593-31cb-ec41-58220ebbb736"
+                        }
+                    ]
                 },
                 "MeshFilterComponent": {
                     "meshGUID": "824d152d-be2f-bbb9-9482-090d580683ff"
@@ -5120,7 +5202,7 @@
                     "WorldTransformation": {
                         "position": {
                             "x": -10.0,
-                            "y": -5.017670631408691,
+                            "y": -5.017669677734375,
                             "z": -37.0
                         },
                         "rotation": {
@@ -5137,7 +5219,7 @@
                     "LocalTransformation": {
                         "position": {
                             "x": -10.0,
-                            "y": -5.017670631408691,
+                            "y": -5.017669677734375,
                             "z": -37.0
                         },
                         "rotation": {
@@ -5154,7 +5236,7 @@
                 }
             },
             {
-                "entityGUID": "310958e2-c595-eab1-aff3-7795bed5ba37",
+                "entityGUID": "b99b68c2-10fb-152e-d828-f2c49462d646",
                 "CapsuleColliderComponent": {
                     "isTrigger": false,
                     "capsule": {
@@ -5169,7 +5251,11 @@
                     }
                 },
                 "MaterialComponent": {
-                    "materialGUID": []
+                    "materialGUID": [
+                        {
+                            "materialGUID": "2e16031c-9593-31cb-ec41-58220ebbb736"
+                        }
+                    ]
                 },
                 "MeshFilterComponent": {
                     "meshGUID": "824d152d-be2f-bbb9-9482-090d580683ff"
@@ -5189,8 +5275,8 @@
                     "WorldTransformation": {
                         "position": {
                             "x": -47.0,
-                            "y": -5.017670631408691,
-                            "z": -42.8387336730957
+                            "y": -5.017669677734375,
+                            "z": -43.0
                         },
                         "rotation": {
                             "x": 0.0,
@@ -5206,8 +5292,8 @@
                     "LocalTransformation": {
                         "position": {
                             "x": -47.0,
-                            "y": -5.017670631408691,
-                            "z": -42.8387336730957
+                            "y": -5.017669677734375,
+                            "z": -43.0
                         },
                         "rotation": {
                             "x": 0.0,
@@ -5223,76 +5309,7 @@
                 }
             },
             {
-                "entityGUID": "7a2f3491-c304-ac21-8543-e761f8ec784a",
-                "CapsuleColliderComponent": {
-                    "isTrigger": false,
-                    "capsule": {
-                        "center": {
-                            "x": -69.30000305175781,
-                            "y": 75.30000305175781,
-                            "z": -4.599999904632568
-                        },
-                        "radius": 61.599998474121094,
-                        "height": 161.1999969482422,
-                        "capsuleDirection": 1
-                    }
-                },
-                "MaterialComponent": {
-                    "materialGUID": []
-                },
-                "MeshFilterComponent": {
-                    "meshGUID": "d99f9522-9e6b-105a-4ef2-7e2b63bcc074"
-                },
-                "NameComponent": {
-                    "entityName": "Electric Prop 1",
-                    "Layer": 0,
-                    "entityTag": "Powerup",
-                    "isPrefab": true,
-                    "prefabName": "Electric Prop 1.prefab",
-                    "hide": false
-                },
-                "PowerupManagerScript": {
-                    "powerupType": "lightning"
-                },
-                "TransformComponent": {
-                    "WorldTransformation": {
-                        "position": {
-                            "x": -88.7430191040039,
-                            "y": -6.0,
-                            "z": -47.0
-                        },
-                        "rotation": {
-                            "x": 0.0,
-                            "y": -0.0,
-                            "z": 0.0
-                        },
-                        "scale": {
-                            "x": 0.019999995827674866,
-                            "y": 0.019999999552965164,
-                            "z": 0.019999995827674866
-                        }
-                    },
-                    "LocalTransformation": {
-                        "position": {
-                            "x": -88.7430191040039,
-                            "y": -6.0,
-                            "z": -47.0
-                        },
-                        "rotation": {
-                            "x": 0.0,
-                            "y": -0.0,
-                            "z": 0.0
-                        },
-                        "scale": {
-                            "x": 0.019999995827674866,
-                            "y": 0.019999999552965164,
-                            "z": 0.019999995827674866
-                        }
-                    }
-                }
-            },
-            {
-                "entityGUID": "6eccd0dd-0748-2903-db9b-c175cbf98f24",
+                "entityGUID": "c68efbae-b0d7-7fdd-96a9-3977ce1e489a",
                 "NameComponent": {
                     "entityName": "Acid Prop Holder",
                     "Layer": 0,
@@ -5318,8 +5335,8 @@
                 "TransformComponent": {
                     "WorldTransformation": {
                         "position": {
-                            "x": -89.0,
-                            "y": -5.5,
+                            "x": -87.08152770996094,
+                            "y": -5.595282554626465,
                             "z": -55.88677978515625
                         },
                         "rotation": {
@@ -5335,8 +5352,8 @@
                     },
                     "LocalTransformation": {
                         "position": {
-                            "x": -89.0,
-                            "y": -5.5,
+                            "x": -87.08152770996094,
+                            "y": -5.595282554626465,
                             "z": -55.88677978515625
                         },
                         "rotation": {
@@ -5353,9 +5370,13 @@
                 },
                 "children": [
                     {
-                        "entityGUID": "55d986f6-250d-876d-6b09-f6ed54032156",
+                        "entityGUID": "74d92746-d9d0-6ebd-8a73-8913013b5027",
                         "MaterialComponent": {
-                            "materialGUID": []
+                            "materialGUID": [
+                                {
+                                    "materialGUID": "c47bcb8a-af57-706b-4154-69f26de1bc97"
+                                }
+                            ]
                         },
                         "MeshFilterComponent": {
                             "meshGUID": "660b9bb0-6212-77a4-c1f4-dc40ea8cce28"
@@ -5365,15 +5386,208 @@
                             "Layer": 0,
                             "entityTag": "Default",
                             "isPrefab": true,
-                            "prefabName": "",
+                            "prefabName": "Acid Prop Holder.prefab",
                             "hide": false
                         },
                         "TransformComponent": {
                             "WorldTransformation": {
                                 "position": {
-                                    "x": -89.0,
-                                    "y": -5.5,
+                                    "x": -87.08152770996094,
+                                    "y": -5.595282554626465,
                                     "z": -55.88677978515625
+                                },
+                                "rotation": {
+                                    "x": 0.0,
+                                    "y": -0.0,
+                                    "z": 0.0
+                                },
+                                "scale": {
+                                    "x": 0.019999999552965164,
+                                    "y": 0.019999999552965164,
+                                    "z": 0.019999999552965164
+                                }
+                            },
+                            "LocalTransformation": {
+                                "position": {
+                                    "x": 0.0,
+                                    "y": 0.0,
+                                    "z": 0.0
+                                },
+                                "rotation": {
+                                    "x": 0.0,
+                                    "y": -0.0,
+                                    "z": 0.0
+                                },
+                                "scale": {
+                                    "x": 1.0,
+                                    "y": 1.0,
+                                    "z": 1.0
+                                }
+                            }
+                        }
+                    }
+                ]
+            },
+            {
+                "entityGUID": "969664a8-2526-a129-18cb-877c7caa3967",
+                "CapsuleColliderComponent": {
+                    "isTrigger": false,
+                    "capsule": {
+                        "center": {
+                            "x": -69.30000305175781,
+                            "y": 75.30000305175781,
+                            "z": -4.599999904632568
+                        },
+                        "radius": 61.599998474121094,
+                        "height": 161.1999969482422,
+                        "capsuleDirection": 1
+                    }
+                },
+                "MaterialComponent": {
+                    "materialGUID": [
+                        {
+                            "materialGUID": "d1dc99cf-dde1-ca8b-eeda-2c33d81b557d"
+                        }
+                    ]
+                },
+                "MeshFilterComponent": {
+                    "meshGUID": "d99f9522-9e6b-105a-4ef2-7e2b63bcc074"
+                },
+                "NameComponent": {
+                    "entityName": "Electric Prop 1",
+                    "Layer": 0,
+                    "entityTag": "Powerup",
+                    "isPrefab": true,
+                    "prefabName": "Electric Prop 1.prefab",
+                    "hide": false
+                },
+                "PowerupManagerScript": {
+                    "powerupType": "lightning"
+                },
+                "TransformComponent": {
+                    "WorldTransformation": {
+                        "position": {
+                            "x": -91.5887451171875,
+                            "y": -6.0,
+                            "z": -47.48569107055664
+                        },
+                        "rotation": {
+                            "x": 179.99989318847656,
+                            "y": -0.000005008955668017734,
+                            "z": 179.99989318847656
+                        },
+                        "scale": {
+                            "x": 0.019999995827674866,
+                            "y": 0.019999999552965164,
+                            "z": 0.019999995827674866
+                        }
+                    },
+                    "LocalTransformation": {
+                        "position": {
+                            "x": -91.5887451171875,
+                            "y": -6.0,
+                            "z": -47.48569107055664
+                        },
+                        "rotation": {
+                            "x": 179.99989318847656,
+                            "y": -0.000005008955668017734,
+                            "z": 179.99989318847656
+                        },
+                        "scale": {
+                            "x": 0.019999995827674866,
+                            "y": 0.019999999552965164,
+                            "z": 0.019999995827674866
+                        }
+                    }
+                }
+            },
+            {
+                "entityGUID": "36fc73f4-5b89-a00f-baa4-621d6671bfa5",
+                "NameComponent": {
+                    "entityName": "Acid Prop Holder",
+                    "Layer": 0,
+                    "entityTag": "Powerup",
+                    "isPrefab": true,
+                    "prefabName": "Acid Prop Holder.prefab",
+                    "hide": false
+                },
+                "PowerupManagerScript": {
+                    "powerupType": "acid"
+                },
+                "SphereColliderComponent": {
+                    "isTrigger": false,
+                    "sphere": {
+                        "center": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "radius": 75.0
+                    }
+                },
+                "TransformComponent": {
+                    "WorldTransformation": {
+                        "position": {
+                            "x": -68.8249740600586,
+                            "y": -5.038332939147949,
+                            "z": -52.88677978515625
+                        },
+                        "rotation": {
+                            "x": 0.0,
+                            "y": -0.0,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 0.019999999552965164,
+                            "y": 0.019999999552965164,
+                            "z": 0.019999999552965164
+                        }
+                    },
+                    "LocalTransformation": {
+                        "position": {
+                            "x": -68.8249740600586,
+                            "y": -5.038332939147949,
+                            "z": -52.88677978515625
+                        },
+                        "rotation": {
+                            "x": 0.0,
+                            "y": -0.0,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 0.019999999552965164,
+                            "y": 0.019999999552965164,
+                            "z": 0.019999999552965164
+                        }
+                    }
+                },
+                "children": [
+                    {
+                        "entityGUID": "165bd87b-9de2-ae67-3950-74d96837174a",
+                        "MaterialComponent": {
+                            "materialGUID": [
+                                {
+                                    "materialGUID": "c47bcb8a-af57-706b-4154-69f26de1bc97"
+                                }
+                            ]
+                        },
+                        "MeshFilterComponent": {
+                            "meshGUID": "660b9bb0-6212-77a4-c1f4-dc40ea8cce28"
+                        },
+                        "NameComponent": {
+                            "entityName": "Acid Canister 1",
+                            "Layer": 0,
+                            "entityTag": "Default",
+                            "isPrefab": true,
+                            "prefabName": "Acid Prop Holder.prefab",
+                            "hide": false
+                        },
+                        "TransformComponent": {
+                            "WorldTransformation": {
+                                "position": {
+                                    "x": -68.8249740600586,
+                                    "y": -5.038332939147949,
+                                    "z": -52.88677978515625
                                 },
                                 "rotation": {
                                     "x": 0.0,
@@ -5486,5 +5700,536 @@
                 }
             }
         }
+    },
+    {
+        "entityGUID": "5e1b716a-1610-9d4d-c582-488e1e890c5a",
+        "LightComponent": {
+            "lightType": 1,
+            "color": {
+                "x": 1.0,
+                "y": 3.5999999046325684,
+                "z": 1.0
+            },
+            "diffuseStrength": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "specularStrength": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "linear": -22.510000228881836,
+            "quadratic": 0.7300000190734863,
+            "direction": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "cutOff": 5.5,
+            "outerCutOff": 10.5,
+            "intesnity": 4.199999809265137,
+            "shadowCast": false,
+            "bakedLighting": false,
+            "depthMapGUID": "00000000-0000-0000-0000-000000000000"
+        },
+        "NameComponent": {
+            "entityName": "Acid Point Light",
+            "Layer": 0,
+            "entityTag": "Default",
+            "isPrefab": false,
+            "prefabName": "",
+            "hide": false
+        },
+        "TransformComponent": {
+            "WorldTransformation": {
+                "position": {
+                    "x": -69.04802703857422,
+                    "y": -3.3431215286254883,
+                    "z": -53.253841400146484
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": -0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            },
+            "LocalTransformation": {
+                "position": {
+                    "x": -69.04802703857422,
+                    "y": -3.3431215286254883,
+                    "z": -53.253841400146484
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": -0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        }
+    },
+    {
+        "entityGUID": "6e1ea1e1-5a00-a6ad-c67f-6b0c57ebbcc2",
+        "CapsuleColliderComponent": {
+            "isTrigger": false,
+            "capsule": {
+                "center": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "radius": 1.5,
+                "height": 2.0,
+                "capsuleDirection": 1
+            }
+        },
+        "FakeEnemyScript": {
+            "enemySpeed": 0.30000001192092896,
+            "enemyDamage": 1,
+            "damageInterval": 0.0,
+            "playerObject": "e8f895d3-5d21-1cc1-766a-6d678cd35f8d",
+            "playerObjectID": 0
+        },
+        "NameComponent": {
+            "entityName": "Enemy",
+            "Layer": 0,
+            "entityTag": "Enemy",
+            "isPrefab": false,
+            "prefabName": "",
+            "hide": false
+        },
+        "PathfinderComponent": {
+            "pathfinderMovementSpeed": 2.5,
+            "chase": true
+        },
+        "RigidbodyComponent": {
+            "mass": 1.0,
+            "drag": 0.0,
+            "angularDrag": 0.05000000074505806,
+            "useGravity": true,
+            "isKinematic": false,
+            "interpolation": 0,
+            "collisionDetection": 0,
+            "constraints": 0,
+            "speed": 0.0,
+            "velocity": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "angularVelocity": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        "TransformComponent": {
+            "WorldTransformation": {
+                "position": {
+                    "x": -78.18982696533203,
+                    "y": -3.007373332977295,
+                    "z": -42.53916931152344
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": -0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            },
+            "LocalTransformation": {
+                "position": {
+                    "x": -78.18982696533203,
+                    "y": -3.007373332977295,
+                    "z": -42.53916931152344
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": -0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        },
+        "children": [
+            {
+                "entityGUID": "7d65ca2c-f8b0-f86b-28a6-8974a62b4579",
+                "MaterialComponent": {
+                    "materialGUID": [
+                        {
+                            "materialGUID": "23e7b1cb-3d50-e7e5-20f9-515b8bddebf5"
+                        }
+                    ]
+                },
+                "MeshFilterComponent": {
+                    "meshGUID": "7b0adace-76b2-df23-aedb-f6a5ed8d4a88"
+                },
+                "NameComponent": {
+                    "entityName": "Enemy Model",
+                    "Layer": 0,
+                    "entityTag": "Default",
+                    "isPrefab": false,
+                    "prefabName": "",
+                    "hide": false
+                },
+                "TransformComponent": {
+                    "WorldTransformation": {
+                        "position": {
+                            "x": -78.18982696533203,
+                            "y": -4.764449119567871,
+                            "z": -42.53916931152344
+                        },
+                        "rotation": {
+                            "x": -0.0013324969913810492,
+                            "y": 3.1805547185895103e-15,
+                            "z": 0.002533148042857647
+                        },
+                        "scale": {
+                            "x": 0.01499999687075615,
+                            "y": 0.014999999664723873,
+                            "z": 0.01499999687075615
+                        }
+                    },
+                    "LocalTransformation": {
+                        "position": {
+                            "x": 0.0,
+                            "y": -1.7570757865905762,
+                            "z": 0.0
+                        },
+                        "rotation": {
+                            "x": -0.0013324969913810492,
+                            "y": 3.1805547185895103e-15,
+                            "z": 0.002533148042857647
+                        },
+                        "scale": {
+                            "x": 0.01499999687075615,
+                            "y": 0.014999999664723873,
+                            "z": 0.01499999687075615
+                        }
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "entityGUID": "732cf860-8752-eb9b-4ff0-7ea5055a7c48",
+        "CapsuleColliderComponent": {
+            "isTrigger": false,
+            "capsule": {
+                "center": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "radius": 1.5,
+                "height": 2.0,
+                "capsuleDirection": 1
+            }
+        },
+        "FakeEnemyScript": {
+            "enemySpeed": 0.30000001192092896,
+            "enemyDamage": 1,
+            "damageInterval": 0.0,
+            "playerObject": "e8f895d3-5d21-1cc1-766a-6d678cd35f8d",
+            "playerObjectID": 0
+        },
+        "NameComponent": {
+            "entityName": "Enemy",
+            "Layer": 0,
+            "entityTag": "Enemy",
+            "isPrefab": false,
+            "prefabName": "",
+            "hide": false
+        },
+        "PathfinderComponent": {
+            "pathfinderMovementSpeed": 2.5,
+            "chase": true
+        },
+        "RigidbodyComponent": {
+            "mass": 1.0,
+            "drag": 0.0,
+            "angularDrag": 0.05000000074505806,
+            "useGravity": true,
+            "isKinematic": false,
+            "interpolation": 0,
+            "collisionDetection": 0,
+            "constraints": 0,
+            "speed": 0.0,
+            "velocity": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "angularVelocity": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        "TransformComponent": {
+            "WorldTransformation": {
+                "position": {
+                    "x": -39.18982696533203,
+                    "y": -3.007373332977295,
+                    "z": -44.53916931152344
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": -0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            },
+            "LocalTransformation": {
+                "position": {
+                    "x": -39.18982696533203,
+                    "y": -3.007373332977295,
+                    "z": -44.53916931152344
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": -0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        },
+        "children": [
+            {
+                "entityGUID": "651d5923-4571-e0ed-53cd-780cac9122ad",
+                "MaterialComponent": {
+                    "materialGUID": [
+                        {
+                            "materialGUID": "23e7b1cb-3d50-e7e5-20f9-515b8bddebf5"
+                        }
+                    ]
+                },
+                "MeshFilterComponent": {
+                    "meshGUID": "7b0adace-76b2-df23-aedb-f6a5ed8d4a88"
+                },
+                "NameComponent": {
+                    "entityName": "Enemy Model",
+                    "Layer": 0,
+                    "entityTag": "Default",
+                    "isPrefab": false,
+                    "prefabName": "",
+                    "hide": false
+                },
+                "TransformComponent": {
+                    "WorldTransformation": {
+                        "position": {
+                            "x": -39.18982696533203,
+                            "y": -4.764449119567871,
+                            "z": -44.53916931152344
+                        },
+                        "rotation": {
+                            "x": -0.0013324969913810492,
+                            "y": 3.1805547185895103e-15,
+                            "z": 0.002533148042857647
+                        },
+                        "scale": {
+                            "x": 0.01499999687075615,
+                            "y": 0.014999999664723873,
+                            "z": 0.01499999687075615
+                        }
+                    },
+                    "LocalTransformation": {
+                        "position": {
+                            "x": 0.0,
+                            "y": -1.7570757865905762,
+                            "z": 0.0
+                        },
+                        "rotation": {
+                            "x": -0.0013324969913810492,
+                            "y": 3.1805547185895103e-15,
+                            "z": 0.002533148042857647
+                        },
+                        "scale": {
+                            "x": 0.01499999687075615,
+                            "y": 0.014999999664723873,
+                            "z": 0.01499999687075615
+                        }
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "entityGUID": "8009859b-bef3-e05a-1fc6-e70115ebc346",
+        "CapsuleColliderComponent": {
+            "isTrigger": false,
+            "capsule": {
+                "center": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "radius": 1.5,
+                "height": 2.0,
+                "capsuleDirection": 1
+            }
+        },
+        "FakeEnemyScript": {
+            "enemySpeed": 0.30000001192092896,
+            "enemyDamage": 1,
+            "damageInterval": 0.0,
+            "playerObject": "e8f895d3-5d21-1cc1-766a-6d678cd35f8d",
+            "playerObjectID": 0
+        },
+        "NameComponent": {
+            "entityName": "Enemy",
+            "Layer": 0,
+            "entityTag": "Enemy",
+            "isPrefab": false,
+            "prefabName": "",
+            "hide": false
+        },
+        "PathfinderComponent": {
+            "pathfinderMovementSpeed": 2.5,
+            "chase": true
+        },
+        "RigidbodyComponent": {
+            "mass": 1.0,
+            "drag": 0.0,
+            "angularDrag": 0.05000000074505806,
+            "useGravity": true,
+            "isKinematic": false,
+            "interpolation": 0,
+            "collisionDetection": 0,
+            "constraints": 0,
+            "speed": 0.0,
+            "velocity": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "angularVelocity": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        "TransformComponent": {
+            "WorldTransformation": {
+                "position": {
+                    "x": -59.18982696533203,
+                    "y": -3.007373332977295,
+                    "z": -53.53916931152344
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": -0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            },
+            "LocalTransformation": {
+                "position": {
+                    "x": -59.18982696533203,
+                    "y": -3.007373332977295,
+                    "z": -53.53916931152344
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": -0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        },
+        "children": [
+            {
+                "entityGUID": "53228812-5244-35ce-a365-ba96f5790edc",
+                "MaterialComponent": {
+                    "materialGUID": [
+                        {
+                            "materialGUID": "23e7b1cb-3d50-e7e5-20f9-515b8bddebf5"
+                        }
+                    ]
+                },
+                "MeshFilterComponent": {
+                    "meshGUID": "7b0adace-76b2-df23-aedb-f6a5ed8d4a88"
+                },
+                "NameComponent": {
+                    "entityName": "Enemy Model",
+                    "Layer": 0,
+                    "entityTag": "Default",
+                    "isPrefab": false,
+                    "prefabName": "",
+                    "hide": false
+                },
+                "TransformComponent": {
+                    "WorldTransformation": {
+                        "position": {
+                            "x": -59.18982696533203,
+                            "y": -4.764449119567871,
+                            "z": -53.53916931152344
+                        },
+                        "rotation": {
+                            "x": -0.0013324969913810492,
+                            "y": 3.1805547185895103e-15,
+                            "z": 0.002533148042857647
+                        },
+                        "scale": {
+                            "x": 0.01499999687075615,
+                            "y": 0.014999999664723873,
+                            "z": 0.01499999687075615
+                        }
+                    },
+                    "LocalTransformation": {
+                        "position": {
+                            "x": 0.0,
+                            "y": -1.7570757865905762,
+                            "z": 0.0
+                        },
+                        "rotation": {
+                            "x": -0.0013324969913810492,
+                            "y": 3.1805547185895103e-15,
+                            "z": 0.002533148042857647
+                        },
+                        "scale": {
+                            "x": 0.01499999687075615,
+                            "y": 0.014999999664723873,
+                            "z": 0.01499999687075615
+                        }
+                    }
+                }
+            }
+        ]
     }
 ]

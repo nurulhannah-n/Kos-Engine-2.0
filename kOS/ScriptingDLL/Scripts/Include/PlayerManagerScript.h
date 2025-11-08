@@ -1,3 +1,4 @@
+#pragma once
 #include "TemplateSC.h"
 //#include "Inputs/Input.h"
 
