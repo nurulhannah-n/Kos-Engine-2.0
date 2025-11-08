@@ -55,8 +55,9 @@ namespace physics {
 		PxControllerManager* GetControllerManager() { return m_controllerManager; }
 		PhysicsEventCallback* GetEventCallback() const { return m_eventCallback; }
 
-		float FixedDeltaTime() const { return m_fixedDeltaTime; }
 		int FrameCount() const { return m_frameCount; }
+		float FixedDeltaTime() const { return m_fixedDeltaTime; }
+		float InterpolationAlpha() const { return m_accumulator / m_fixedDeltaTime;  }
 
 		void AddForce(void*, const glm::vec3&, ForceMode mode = ForceMode::Force);
 		void AddTorque(void*, const glm::vec3&, ForceMode mode = ForceMode::Force);
