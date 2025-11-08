@@ -296,7 +296,6 @@ namespace ecs {
             return;
         }
 
-        //float* lifetime = (float*)NvFlexMap((NvFlexBuffer*)particle->pointers[4], eNvFlexMapWait);
         auto it = particle->alive_Particles.begin();
         while (it != particle->alive_Particles.end()) {
             short particleIdx = *it;
@@ -319,15 +318,11 @@ namespace ecs {
                 it = particle->alive_Particles.erase(it);
             }
         }
-        //NvFlexUnmap((NvFlexBuffer*)particle->pointers[4]);
     }
 
-    //LOGIC ERROR IN THE EMITTER
     void ParticleSystem::UpdateEmitters(float dt,EntityID id, ParticleComponent*& particleComp,  TransformComponent* transform, glm::vec4* position, glm::vec3* velocities, float* lifetime_list) {
         const auto& entities = m_entities.Data();
 
-
-            
         // Check if emitter should be active
         bool shouldEmit = false;
         bool particles_Alive = false;
@@ -344,9 +339,12 @@ namespace ecs {
             }
         }
         if (shouldEmit) {
-            // --- PERFORMANCE OPTIMIZATION: Map buffers ONCE before emission loop ---
             particleComp->emitterTime += dt;
             float emissionInterval = particleComp->emissionInterval;
+
+            if (emissionInterval <= 0.0f) {
+                return;  // Simply don't emit particles
+            }
 
             while (particleComp->emitterTime >= emissionInterval) {
                 glm::vec3 pos = transform->WorldTransformation.position;
@@ -361,7 +359,6 @@ namespace ecs {
                     particleComp->start_Velocity,
                     randZ * particleComp->start_Velocity
                 );
-
 
                 EmitParticle(id, pos, vel, particleComp->start_Lifetime, particleComp, position, velocities, lifetime_list);
                 particleComp->emitterTime -= emissionInterval;
@@ -415,4 +412,13 @@ namespace ecs {
         }
     }
 
+    void* ParticleSystem::getVoid(ParticleComponent* particle, STATE state) {
+        void* ret;
+        if (state >= STATE::counter) {
+            LOGGING_ERROR("WRONG STATE FOR PARTICLE SYSTEM");
+            return particle->pointers[0];
+        }
+        ret = particle->pointers[state];
+        return ret;
+    }
 }
