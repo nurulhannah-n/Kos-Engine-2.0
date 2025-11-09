@@ -22,3 +22,5 @@
 #include "PlayerManagerScript.h"
 #include "AbilityUIScript.h"
 #include "EventColliderScript.h"
+
+#include "HealthbarUIScript.h"
